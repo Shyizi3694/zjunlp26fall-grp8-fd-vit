@@ -1,0 +1,38 @@
+# FD-VIT baseline/runtime dependencies.
+#
+# For CUDA machines, install the PyTorch wheel matching the local CUDA runtime
+# before or with this file if the default PyPI wheel is not appropriate.
+
+torch>=2.5.0
+torchvision>=0.20.0
+
+# Qwen3-VL runtime. The official Qwen3-VL README requires transformers >= 4.57.0
+# and recommends qwen-vl-utils 0.0.14 for visual input processing.
+transformers>=4.57.0
+qwen-vl-utils==0.0.14
+accelerate>=1.10.0
+huggingface-hub>=0.35.0
+hf-xet>=1.1.0
+safetensors>=0.5.0
+sentencepiece>=0.2.0
+protobuf>=5.29.0
+
+# LoRA / QLoRA fine-tuning path.
+peft>=0.17.0
+bitsandbytes>=0.47.0; platform_system == "Linux"
+trl>=0.23.0
+
+# Data processing and evaluation.
+datasets>=4.0.0
+numpy>=1.26.0,<3.0.0
+pandas>=2.2.0
+scikit-learn>=1.5.0
+Pillow>=10.4.0
+opencv-python-headless>=4.10.0.84
+tqdm>=4.66.0
+PyYAML>=6.0.2
+jsonschema>=4.23.0
+rich>=13.8.0
+
+# Optional acceleration. Install only on compatible Linux/CUDA hosts:
+# flash-attn>=2.6.0
