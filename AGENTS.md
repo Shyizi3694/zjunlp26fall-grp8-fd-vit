@@ -1,11 +1,11 @@
-<!-- Generated from .codex/skills/fd-vit-task-runner by scripts/agent_framework.py. Do not edit directly. -->
+<!-- Generated from .agents/skills/fd-vit-task-runner by scripts/agent_framework.py. Do not edit directly. -->
 # AGENTS.md
 
 ## Repository Expectations
 
 - This repo implements FD-VIT: Qwen3-VL + OK-VQA/VQA + baseline probing + LoRA random/failure-driven tuning.
 - For any coding task, use the FD-VIT task runner skill if your agent supports skills.
-- If skills are unavailable, read `.codex/skills/fd-vit-task-runner/SKILL.md` and follow its references manually.
+- If skills are unavailable, read `.agents/skills/fd-vit-task-runner/SKILL.md` and follow its references manually.
 - Repository docs are the source of truth; the skill only routes and enforces the workflow.
 - Start with `docs/README.md` for the current docs overview and scope layers.
 
@@ -14,7 +14,7 @@
 1. Classify the user request into a Phase or Task card.
 2. Read `docs/FD_VIT_CODING_AGENT_GUIDE.md` for phase and global constraints.
 3. Read `docs/CODING_AGENT_TASK_CARDS.md` for exact inputs, outputs, implementation requirements, self-tests, and done criteria.
-4. Read only the task-specific docs routed by `.codex/skills/fd-vit-task-runner/references/doc-routing.md`.
+4. Read only the task-specific docs routed by `.agents/skills/fd-vit-task-runner/references/doc-routing.md`.
 
 ## Non-Negotiable Constraints
 

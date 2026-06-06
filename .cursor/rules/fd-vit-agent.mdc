@@ -4,14 +4,14 @@ globs: "**/*"
 alwaysApply: true
 ---
 
-<!-- Generated from .codex/skills/fd-vit-task-runner by scripts/agent_framework.py. Do not edit directly. -->
+<!-- Generated from .agents/skills/fd-vit-task-runner by scripts/agent_framework.py. Do not edit directly. -->
 
 # FD-VIT Agent Rule
 
 - Use `AGENTS.md` as the short repository entrypoint.
-- Use `.codex/skills/fd-vit-task-runner/SKILL.md` as the canonical skill source.
+- Use `.agents/skills/fd-vit-task-runner/SKILL.md` as the canonical skill source.
 - Before coding, identify the Phase/Task card in `docs/CODING_AGENT_TASK_CARDS.md`.
-- Read task-specific docs through `.codex/skills/fd-vit-task-runner/references/doc-routing.md`.
+- Read task-specific docs through `.agents/skills/fd-vit-task-runner/references/doc-routing.md`.
 - Obey `docs/DATA_AND_FORMAT_CONTRACT.md`, `docs/EXPERIMENT_PROTOCOL.md`, and `docs/ERROR_TAXONOMY.md` for schemas, metrics, splits, and errors.
 - Do not expand the experiment matrix, contaminate val/test, use raw string matching as the only VQA metric, or invent results.
 - Finish with changed files, commands, generated artifacts, validation, risks, and next step.

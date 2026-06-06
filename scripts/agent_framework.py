@@ -4,14 +4,13 @@
 from __future__ import annotations
 
 import argparse
-import os
 import shutil
 import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CANONICAL_REL = Path(".codex/skills/fd-vit-task-runner")
+CANONICAL_REL = Path(".agents/skills/fd-vit-task-runner")
 CANONICAL = ROOT / CANONICAL_REL
 
 SKILL_FILES = [
@@ -25,7 +24,6 @@ SKILL_FILES = [
 MIRROR_RELS = [
     Path(".claude/skills/fd-vit-task-runner"),
     Path(".windsurf/skills/fd-vit-task-runner"),
-    Path(".agents/skills/fd-vit-task-runner"),
 ]
 
 ADAPTER_RELS = [
@@ -36,7 +34,7 @@ ADAPTER_RELS = [
 ]
 
 GENERATED_HEADER = (
-    "<!-- Generated from .codex/skills/fd-vit-task-runner by "
+    "<!-- Generated from .agents/skills/fd-vit-task-runner by "
     "scripts/agent_framework.py. Do not edit directly. -->"
 )
 
@@ -305,13 +303,12 @@ def check() -> list[str]:
 
 def install_codex(*, force: bool = False) -> list[str]:
     require_canonical()
-    codex_home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")).expanduser()
-    target = codex_home / "skills/fd-vit-task-runner"
+    target = Path.home() / ".agents/skills/fd-vit-task-runner"
     if target.exists() and not force:
         current = {file_rel: read_text(target / file_rel) for file_rel in SKILL_FILES if (target / file_rel).exists()}
         expected = {file_rel: read_text(CANONICAL / file_rel) for file_rel in SKILL_FILES}
         if current != expected:
-            raise RuntimeError(f"Refusing to overwrite existing Codex skill at {target}; use --force.")
+            raise RuntimeError(f"Refusing to overwrite existing Codex user skill at {target}; use --force.")
     target.parent.mkdir(parents=True, exist_ok=True)
     if target.exists():
         shutil.rmtree(target)
