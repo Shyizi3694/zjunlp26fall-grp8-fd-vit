@@ -216,3 +216,17 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# FD-VIT local data/model artifacts
+data/raw/
+data/interim/
+data/processed/
+models/
+checkpoints/
+logs/
+
+# Keep aggregate summaries reviewable, but avoid committing bulky per-sample outputs.
+outputs/**/predictions.jsonl
+outputs/**/errors.jsonl
+outputs/**/failures_mined.jsonl
+outputs/**/raw_generations.jsonl

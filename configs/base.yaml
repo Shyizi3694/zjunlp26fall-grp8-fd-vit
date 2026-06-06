@@ -1,0 +1,36 @@
+project:
+  name: fd-vit
+  seed: 42
+
+model:
+  model_id: Qwen/Qwen3-VL-4B-Instruct
+  low_vram_fallback_model_id: Qwen/Qwen3-VL-2B-Instruct
+  local_dir: models/Qwen3-VL-4B-Instruct
+  revision: main
+  generation:
+    temperature: 0.0
+    top_p: 1.0
+    max_new_tokens: 16
+
+data:
+  raw_dir: data/raw
+  okvqa_raw_dir: data/raw/okvqa
+  coco_image_root: data/raw/coco
+  processed_okvqa_dir: data/processed/okvqa
+  sample_dir: data/samples
+
+experiments:
+  eval_split: val_1k
+  train_size: 2000
+  lora_rank: 8
+  required:
+    - E00_zero_shot
+    - E01_prompt_only
+    - E02_lora_random_2k_r8
+    - E03_lora_failure_2k_r8
+
+paths:
+  logs_dir: logs
+  outputs_dir: outputs
+  checkpoints_dir: checkpoints
+  prompts_dir: prompts
