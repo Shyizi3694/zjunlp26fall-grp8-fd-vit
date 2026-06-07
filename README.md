@@ -221,6 +221,25 @@ python3 scripts/prepare_okvqa.py \
 - 图片路径抽查结果（检查数量、存在数、缺失数）
 - 平均问题长度、平均答案长度、Top-20 高频答案
 
+如果要跑 baseline，请额外生成 1k 验证子集（Phase 3/E00/E01 输入）：
+
+```bash
+python3 scripts/build_eval_subset.py \
+  --input data/processed/okvqa/val.jsonl \
+  --split val \
+  --size 1000 \
+  --seed 42 \
+  --output data/processed/okvqa/val_1k.jsonl \
+  --overwrite
+```
+
+该命令会生成：
+
+- `data/processed/okvqa/val_1k.jsonl`
+- `data/processed/okvqa/val_1k.summary.json`
+
+建议先检查 `val_1k.summary.json` 中 `actual_size=1000`（或当源文件不足时的实际数量）。
+
 ## 数据校验（Task 2）
 
 在准备好 JSONL 后，先做快速数据一致性检查。`scripts/validate_data.py` 支持解析 JSON/JSONL、字段完整性、`sample_id` 唯一性、问题/答案非空、图片存在性、Qwen 格式 `<image>` 检查、train-eval 重叠检查。
@@ -344,6 +363,48 @@ python3 scripts/run_inference.py \
   --input data/processed/okvqa/val_1k.jsonl \
   --output outputs/E01_prompt_strict/predictions.jsonl \
   --seed 42 \
+  --overwrite
+
+python3 scripts/evaluate_vqa.py \
+  --predictions outputs/E01_prompt_strict/predictions.jsonl \
+  --output outputs/E01_prompt_strict/metrics.json \
+  --error_output outputs/E01_prompt_strict/errors.jsonl \
+  --overwrite
+```
+
+### 完整 baseline 一条龙（推荐）
+
+先确认 `data/processed/okvqa/val_1k.jsonl` 已存在（见“数据准备”）。若还没生成：
+
+```bash
+python3 scripts/build_eval_subset.py \
+  --input data/processed/okvqa/val.jsonl \
+  --split val \
+  --size 1000 \
+  --seed 42 \
+  --output data/processed/okvqa/val_1k.jsonl \
+  --overwrite
+```
+
+然后顺序执行：
+
+```bash
+python3 scripts/run_inference.py \
+  --config configs/infer_zero_shot.yaml \
+  --input data/processed/okvqa/val_1k.jsonl \
+  --output outputs/E00_zero_shot_basic/predictions.jsonl \
+  --overwrite
+
+python3 scripts/evaluate_vqa.py \
+  --predictions outputs/E00_zero_shot_basic/predictions.jsonl \
+  --output outputs/E00_zero_shot_basic/metrics.json \
+  --error_output outputs/E00_zero_shot_basic/errors.jsonl \
+  --overwrite
+
+python3 scripts/run_inference.py \
+  --config configs/infer_prompt_only.yaml \
+  --input data/processed/okvqa/val_1k.jsonl \
+  --output outputs/E01_prompt_strict/predictions.jsonl \
   --overwrite
 
 python3 scripts/evaluate_vqa.py \

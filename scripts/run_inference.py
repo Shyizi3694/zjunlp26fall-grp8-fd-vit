@@ -165,6 +165,7 @@ def main() -> int:
             return 0
 
         checkpoint = args.lora_checkpoint or infer_cfg.get("checkpoint")
+        experiment_id = cfg.get("experiment_id", "unknown")
         bundle = load_qwen(
             model_id=model_id,
             local_dir=model_cfg.get("local_dir"),
@@ -187,6 +188,7 @@ def main() -> int:
             checkpoint=checkpoint,
             seed=args.seed,
             batch_size=batch_size,
+            experiment_id=experiment_id,
             log_file=args.log_file,
         )
 

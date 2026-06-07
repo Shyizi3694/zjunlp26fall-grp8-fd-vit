@@ -12,7 +12,7 @@ if str(Path(__file__).resolve().parents[1] / "src") not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from fdvit.evaluation import evaluate_records
-from fdvit_prep_common import append_log, emit, repo_path
+from fdvit_prep_common import append_log, emit, repo_path, utc_now
 
 
 def parse_args() -> argparse.Namespace:
@@ -66,6 +66,8 @@ def main() -> int:
             for key in ("experiment_id", "model_id", "checkpoint", "dataset", "split", "generation_config"):
                 if key in first and key not in report:
                     report[key] = first[key]
+        if "created_at" not in report:
+            report["created_at"] = utc_now()
 
         output_path = repo_path(args.output)
         if output_path.exists() and not args.overwrite:

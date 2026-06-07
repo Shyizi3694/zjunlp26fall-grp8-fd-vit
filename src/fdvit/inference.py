@@ -143,6 +143,7 @@ def run_inference(
     seed: int = 42,
     start: int = 0,
     batch_size: int = 1,
+    experiment_id: str | None = None,
     log_file: str | None = None,
 ) -> list[dict[str, Any]]:
     rng = random.Random(seed)
@@ -178,6 +179,7 @@ def run_inference(
                 "batch_size": batch_size,
                 "do_sample": infer_config.do_sample,
             },
+            "experiment_id": experiment_id,
             "runtime": {
                 "latency_sec": 0.0,
                 "device": device,
