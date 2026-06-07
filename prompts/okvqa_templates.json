@@ -1,0 +1,32 @@
+[
+  {
+    "template_id": "okvqa_short_001",
+    "task": "vqa",
+    "text": "<image>\nQuestion: {question}\nAnswer with a short phrase only. Do not explain."
+  },
+  {
+    "template_id": "okvqa_short_002",
+    "task": "vqa",
+    "text": "<image>\nLook at the image and answer this question: {question}\nGive only the answer, not a sentence."
+  },
+  {
+    "template_id": "okvqa_short_003",
+    "task": "vqa",
+    "text": "<image>\nWhat is the correct answer to this question?\nQuestion: {question}\nShort answer:"
+  },
+  {
+    "template_id": "okvqa_short_004",
+    "task": "vqa",
+    "text": "<image>\nQuestion: {question}\nPlease answer with exactly one short phrase."
+  },
+  {
+    "template_id": "okvqa_short_005",
+    "task": "vqa",
+    "text": "<image>\nBased on the image, answer briefly: {question}\nAnswer only with the most likely short answer."
+  },
+  {
+    "template_id": "okvqa_short_006",
+    "task": "vqa",
+    "text": "<image>\nQuestion: {question}\nDo not output explanations.\nAnswer:"
+  }
+]

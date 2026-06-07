@@ -1,0 +1,7 @@
+[
+  {
+    "template_id": "vqa_base_001",
+    "task": "vqa",
+    "text": "<image>\nQuestion: {question}\nAnswer with a short phrase only. Do not explain."
+  }
+]
