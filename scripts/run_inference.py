@@ -87,7 +87,13 @@ def _write_artifacts(
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     run_config_path = output_path.parent / "run_config.yaml"
-    run_config_path.write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
+    try:
+        import yaml
+
+        run_config_text = yaml.safe_dump(cfg, sort_keys=False, allow_unicode=True)
+    except Exception:
+        run_config_text = json.dumps(cfg, ensure_ascii=False, indent=2)
+    run_config_path.write_text(run_config_text, encoding="utf-8")
 
     command_path = output_path.parent / "command.txt"
     command_path.write_text(
