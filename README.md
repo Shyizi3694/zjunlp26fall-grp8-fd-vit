@@ -262,3 +262,127 @@ python3 scripts/validate_data.py \
 - `checks.images_exist` 在完整环境下达到预期（若未下载图片，这一项会是 false）。
 
 建议把 `data/processed/okvqa/` 和 `logs/` 的输出摘要提交到 `logs`，避免大文件被误提交。
+
+## Phase 2：Prompt 模板库与短答案约束（Task 3）
+
+本项目新增了可复用的 VQA prompt 模板与预览脚本，用于 E00/E01 基线一致性比较。
+
+### 文件
+
+- `prompts/okvqa_templates.json`：OK-VQA 任务的 6 个 short-answer 模板（含 `Answer with a short phrase only` 等约束）
+- `prompts/vqa_templates.json`：通用 VQA 模板（可选）
+- `scripts/preview_prompts.py`：从 `data/samples/okvqa_10.jsonl` 生成 prompt 渲染预览
+
+### 快速预览命令
+
+```bash
+python3 scripts/preview_prompts.py \
+  --input data/samples/okvqa_10.jsonl \
+  --template_file prompts/okvqa_templates.json \
+  --output logs/prompt_preview.md \
+  --overwrite
+```
+
+预览文件会把 `{question}` 被替换后的最终 prompt 输出，便于人工审核是否包含 `<image>`、short-answer 约束与模板可读性。
+
+## Phase 3：推理脚本与 zero-shot/prompt-only baseline（Task 6/7）
+
+本阶段新增了统一推理链路和评测链路：
+
+- `src/fdvit/model_qwen.py`：模型加载（支持本地模型优先，支持 LoRA checkpoint 挂载）
+- `src/fdvit/inference.py`：逐条/批量推理核心逻辑
+- `src/fdvit/prompts.py`：模板加载与渲染
+- `scripts/run_inference.py`：零样本/Prompt-only 实验主脚本
+- `scripts/evaluate_vqa.py`：统一评测脚本（`acc_any`、`acc_soft`、`format_error_rate`）
+- `scripts/normalize_answer.py`：答案归一化入口
+- `src/fdvit/evaluation.py`：规范化与指标计算函数
+- 配置：`configs/infer_zero_shot.yaml`、`configs/infer_prompt_only.yaml`
+
+### 小样本 smoke test
+
+先在 `data/samples/okvqa_10.jsonl` 上跑 10 条，确认链路与输出格式：
+
+```bash
+python3 scripts/run_inference.py \
+  --config configs/infer_zero_shot.yaml \
+  --input data/samples/okvqa_10.jsonl \
+  --output outputs/debug_zero_shot/predictions.jsonl \
+  --limit 10 \
+  --seed 42 \
+  --overwrite
+
+python3 scripts/evaluate_vqa.py \
+  --predictions outputs/debug_zero_shot/predictions.jsonl \
+  --output outputs/debug_zero_shot/metrics.json \
+  --error_output outputs/debug_zero_shot/errors.jsonl \
+  --overwrite
+```
+
+### 运行 E00 / E01 baseline
+
+默认要求已完成模型与数据准备，并且在 `fd-vit` 环境中可运行（本地模型建议：
+`models/Qwen3-VL-4B-Instruct`）。
+
+```bash
+# 1) zero-shot baseline（E00）
+python3 scripts/run_inference.py \
+  --config configs/infer_zero_shot.yaml \
+  --input data/processed/okvqa/val_1k.jsonl \
+  --output outputs/E00_zero_shot_basic/predictions.jsonl \
+  --seed 42 \
+  --overwrite
+
+python3 scripts/evaluate_vqa.py \
+  --predictions outputs/E00_zero_shot_basic/predictions.jsonl \
+  --output outputs/E00_zero_shot_basic/metrics.json \
+  --error_output outputs/E00_zero_shot_basic/errors.jsonl \
+  --overwrite
+
+# 2) prompt-only baseline（E01）
+python3 scripts/run_inference.py \
+  --config configs/infer_prompt_only.yaml \
+  --input data/processed/okvqa/val_1k.jsonl \
+  --output outputs/E01_prompt_strict/predictions.jsonl \
+  --seed 42 \
+  --overwrite
+
+python3 scripts/evaluate_vqa.py \
+  --predictions outputs/E01_prompt_strict/predictions.jsonl \
+  --output outputs/E01_prompt_strict/metrics.json \
+  --error_output outputs/E01_prompt_strict/errors.jsonl \
+  --overwrite
+```
+
+### baseline 结果如何获取
+
+每个实验目录会产生可复现的结果文件（推荐保留）：
+
+- `outputs/<exp>/predictions.jsonl`：逐样本预测
+- `outputs/<exp>/metrics.json`：聚合指标
+- `outputs/<exp>/errors.jsonl`：错误样本（供后续 failure mining）
+- `outputs/<exp>/run_config.yaml`：本次实验参数
+- `outputs/<exp>/command.txt`：完整执行命令
+- `outputs/<exp>/environment.txt`：运行环境版本信息
+
+可用如下命令提取可写入报告的指标：
+
+```bash
+cat outputs/E00_zero_shot_basic/metrics.json
+cat outputs/E01_prompt_strict/metrics.json
+wc -l outputs/E00_zero_shot_basic/predictions.jsonl
+wc -l outputs/E01_prompt_strict/predictions.jsonl
+```
+
+如需同时观察 E00/E01 对比：
+
+```bash
+python3 - <<'PY'
+import json
+for exp in ['E00_zero_shot_basic', 'E01_prompt_strict']:
+    with open(f'outputs/{exp}/metrics.json', 'r', encoding='utf-8') as f:
+        m = json.load(f)
+    print(exp, 'acc_any=', m.get('acc_any'), 'acc_soft=', m.get('acc_soft'), 'format_error=', m.get('format_error_rate'))
+PY
+```
+
+若训练/下载环境不稳定（无法访问 HF 或模型未完整下载），可先产出 `outputs/debug_zero_shot` 的流程验证，确认脚本可用后再在外部可联网环境补齐完整模型后重跑 baseline。
