@@ -188,3 +188,77 @@ python scripts/prepare_model.py \
 - raw 数据和模型权重不进入 git；只提交脚本、配置、文档、指标和小型摘要。
 
 这些检查通过后，下一步是 `docs/CODING_AGENT_TASK_CARDS.md` 中的 Task 1：用 `scripts/prepare_okvqa.py` 把原始 OK-VQA 和 COCO 图片路径转换为项目统一 JSONL 格式。
+
+## 数据准备（Task 1）
+
+OK-VQA 数据处理脚本将 raw 标注与图片信息统一成 `data/processed/okvqa/` 下的标准格式（`train.jsonl`、`val.jsonl`），并生成校验统计与 10 条冒烟样本：
+
+```bash
+python3 scripts/prepare_okvqa.py \
+  --raw_dir data/raw/okvqa \
+  --image_root data/raw/coco \
+  --output_dir data/processed/okvqa \
+  --limit 20 \
+  --seed 42 \
+  --overwrite
+```
+
+生成文件：
+
+- `data/processed/okvqa/train.jsonl`
+- `data/processed/okvqa/val.jsonl`
+- `data/processed/okvqa/stats.json`
+- `data/samples/okvqa_10.jsonl`
+
+单条样本字段（数据契约）：
+
+- `sample_id`, `dataset`, `split`, `question_id`, `image_id`, `image_path`, `question`, `answers`, `answer`
+
+`data/processed/okvqa/stats.json` 中会记录：
+
+- 样本总数/按 split 样本数
+- 空答案比例、空问题比例
+- 图片路径抽查结果（检查数量、存在数、缺失数）
+- 平均问题长度、平均答案长度、Top-20 高频答案
+
+## 数据校验（Task 2）
+
+在准备好 JSONL 后，先做快速数据一致性检查。`scripts/validate_data.py` 支持解析 JSON/JSONL、字段完整性、`sample_id` 唯一性、问题/答案非空、图片存在性、Qwen 格式 `<image>` 检查、train-eval 重叠检查。
+
+最小自测（推荐）：
+
+```bash
+python3 scripts/validate_data.py \
+  --input data/samples/okvqa_10.jsonl \
+  --check_images \
+  --output logs/validate_sample.json
+```
+
+如果当前图片未完整下载，可先用：
+
+```bash
+python3 scripts/validate_data.py \
+  --input data/samples/okvqa_10.jsonl \
+  --output logs/validate_sample.json
+```
+
+验证 train/val 泄漏（如有 `train` 和 `val` 文件）：
+
+```bash
+python3 scripts/validate_data.py \
+  --input data/processed/okvqa/train.jsonl \
+  --check_overlap \
+  --train data/processed/okvqa/train.jsonl \
+  --eval data/processed/okvqa/val.jsonl \
+  --output logs/validate_train.json
+```
+
+通过标准：
+
+- 脚本返回码为 0；
+- `logs/validate_*.json` 为可解析 JSON；
+- `sample_id` 不重复；
+- `required_fields` 为 true；
+- `checks.images_exist` 在完整环境下达到预期（若未下载图片，这一项会是 false）。
+
+建议把 `data/processed/okvqa/` 和 `logs/` 的输出摘要提交到 `logs`，避免大文件被误提交。
