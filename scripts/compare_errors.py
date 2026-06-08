@@ -8,6 +8,7 @@ import csv
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 if str(Path(__file__).resolve().parents[1] / "scripts") not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -72,6 +73,29 @@ def load_error_rows(exp_dir: Path) -> tuple[str, dict[str, int]]:
     return exp_id, counts
 
 
+def canonical_col(exp_id: str) -> str:
+    if exp_id.startswith("E00"):
+        return "E00_errors"
+    if exp_id.startswith("E01"):
+        return "E01_errors"
+    if exp_id.startswith("E02"):
+        return "E02_errors"
+    if exp_id.startswith("E03"):
+        return "E03_errors"
+    return f"{exp_id}_errors"
+
+
+def build_observation(row: dict[str, Any]) -> str:
+    if "E03_errors" in row and "E02_errors" in row:
+        delta = int(row["E03_errors"]) - int(row["E02_errors"])
+        if delta < 0:
+            return "improved vs random"
+        if delta > 0:
+            return "worse vs random"
+        return "unchanged vs random"
+    return ""
+
+
 def main() -> int:
     args = parse_args()
     try:
@@ -80,9 +104,10 @@ def main() -> int:
             exp_id, counts = load_error_rows(repo_path(exp_dir))
             experiments.append((exp_id, counts))
 
-        headers = ["error_type"] + [exp_id for exp_id, _ in experiments]
-        if any(exp_id.startswith("E03") for exp_id, _ in experiments) and any(exp_id.startswith("E02") for exp_id, _ in experiments):
-            headers.append("E03_minus_E02")
+        ordered = [(exp_id, canonical_col(exp_id), counts) for exp_id, counts in experiments]
+        headers = ["error_type"] + [col for _, col, _ in ordered]
+        if any(exp_id.startswith("E03") for exp_id, _, _ in ordered) and any(exp_id.startswith("E02") for exp_id, _, _ in ordered):
+            headers.extend(["E03_minus_E02", "observation"])
 
         csv_path = repo_path(args.output_csv)
         if csv_path.exists() and not args.overwrite:
@@ -93,12 +118,13 @@ def main() -> int:
             writer.writeheader()
             for error_type in ERROR_TYPES:
                 row = {"error_type": error_type}
-                for exp_id, counts in experiments:
-                    row[exp_id] = counts.get(error_type, 0)
+                for exp_id, col, counts in ordered:
+                    row[col] = counts.get(error_type, 0)
                 if "E03_minus_E02" in headers:
-                    e03 = next(counts.get(error_type, 0) for exp_id, counts in experiments if exp_id.startswith("E03"))
-                    e02 = next(counts.get(error_type, 0) for exp_id, counts in experiments if exp_id.startswith("E02"))
+                    e03 = next(counts.get(error_type, 0) for exp_id, _, counts in ordered if exp_id.startswith("E03"))
+                    e02 = next(counts.get(error_type, 0) for exp_id, _, counts in ordered if exp_id.startswith("E02"))
                     row["E03_minus_E02"] = e03 - e02
+                    row["observation"] = build_observation(row)
                 writer.writerow(row)
 
         md_path = repo_path(args.output_md)

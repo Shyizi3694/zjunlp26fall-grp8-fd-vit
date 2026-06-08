@@ -12,9 +12,12 @@ from typing import Any
 
 if str(Path(__file__).resolve().parents[1] / "src") not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+if str(Path(__file__).resolve().parents[1] / "scripts") not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from fdvit.evaluation import normalize_answer
 from fdvit_prep_common import append_log, emit, repo_path
+from mine_failures import detect_error_type
 
 
 def parse_args() -> argparse.Namespace:
@@ -43,6 +46,10 @@ def is_correct(row: dict[str, Any]) -> bool:
     return bool(answers and pred in answers)
 
 
+def prediction_text(row: dict[str, Any]) -> str:
+    return str(row.get("prediction") or row.get("prediction_raw") or "")
+
+
 def main() -> int:
     args = parse_args()
     try:
@@ -65,32 +72,58 @@ def main() -> int:
             score = sum(1 for value in correctness.values() if value)
             scored.append((sample_id, score, rows, correctness))
 
-        improved = [item for item in scored if any(name.startswith("E03") and ok for name, ok in item[3].items())]
+        preferred = []
+        for item in scored:
+            _, _, rows, correctness = item
+            e00_ok = next((ok for name, ok in correctness.items() if name.startswith("E00")), False)
+            e02_ok = next((ok for name, ok in correctness.items() if name.startswith("E02")), False)
+            e03_ok = next((ok for name, ok in correctness.items() if name.startswith("E03")), False)
+            if e03_ok and not e02_ok:
+                preferred.append((0, item))
+            elif not e03_ok:
+                preferred.append((1, item))
+            elif e03_ok and not e00_ok:
+                preferred.append((2, item))
+            else:
+                preferred.append((3, item))
+
         rng = random.Random(args.seed)
-        rng.shuffle(improved)
-        chosen = improved[: args.num_cases]
+        rng.shuffle(preferred)
+        preferred.sort(key=lambda x: x[0])
+        chosen = [item for _, item in preferred[: args.num_cases]]
 
         lines = [
             "# Case Studies",
             "",
-            "| Case | image_path | question | GT answers | " + " | ".join(experiments.keys()) + " | Note |",
-            "|---|---|---|---|" + "|".join(["---"] * len(experiments)) + "|---|",
+            "| Case | image_path | question | GT answers | " + " | ".join(experiments.keys()) + " | Error Type | Note |",
+            "|---|---|---|---|" + "|".join(["---"] * len(experiments)) + "|---|---|",
         ]
         for idx, (_, _, rows, correctness) in enumerate(chosen, start=1):
             any_row = next(iter(rows.values()))
             preds = []
             for name in experiments.keys():
                 row = rows[name]
-                pred_text = str(row.get("prediction") or row.get("prediction_raw") or "").replace("|", "\\|")
+                pred_text = prediction_text(row).replace("|", "\\|")
                 suffix = " (correct)" if correctness[name] else ""
                 preds.append(pred_text + suffix)
-            note = "E03 improves over earlier baseline" if any(name.startswith("E03") and correctness[name] for name in correctness) else ""
+            error_type = detect_error_type(any_row)
+            e00_ok = next((ok for name, ok in correctness.items() if name.startswith("E00")), False)
+            e02_ok = next((ok for name, ok in correctness.items() if name.startswith("E02")), False)
+            e03_ok = next((ok for name, ok in correctness.items() if name.startswith("E03")), False)
+            if e03_ok and not e02_ok:
+                note = "failure-driven fixes an error that random LoRA misses"
+            elif e03_ok and not e00_ok:
+                note = "fine-tuning fixes a zero-shot error"
+            elif not e03_ok:
+                note = "failure-driven still fails; useful for limitation analysis"
+            else:
+                note = "all stronger systems succeed"
             lines.append(
                 f"| {idx} | {str(any_row.get('image_path','')).replace('|','\\\\|')} | "
                 f"{str(any_row.get('question','')).replace('|','\\\\|')} | "
                 f"{'; '.join(any_row.get('answers', []))[:120].replace('|','\\\\|')} | "
                 + " | ".join(preds)
-                + f" | {note} |"
+                + f" | {error_type} | {note} |"
             )
 
         output_path = repo_path(args.output)

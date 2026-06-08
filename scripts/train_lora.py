@@ -15,8 +15,6 @@ from typing import Any
 if str(Path(__file__).resolve().parents[1] / "src") not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-import numpy as np
-
 from fdvit_prep_common import append_log, display_path, emit, repo_path
 
 
@@ -45,7 +43,6 @@ def load_yaml_or_json(path: str | Path) -> dict[str, Any]:
 
 def set_seed(seed: int) -> None:
     random.seed(seed)
-    np.random.seed(seed)
     try:
         import torch
 

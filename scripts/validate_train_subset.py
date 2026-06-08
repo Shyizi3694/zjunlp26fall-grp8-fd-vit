@@ -61,10 +61,35 @@ def main() -> int:
             qwen_rows = read_json_like(args.qwen_input)
             qwen_summary = {
                 "num_rows": len(qwen_rows),
+                "matches_subset_size": len(qwen_rows) == len(rows),
                 "all_have_image": all(isinstance(row.get("image"), str) and row.get("image") for row in qwen_rows),
                 "all_have_conversations": all(isinstance(row.get("conversations"), list) and len(row.get("conversations", [])) >= 2 for row in qwen_rows),
+                "all_have_prompt_image_token": all(
+                    isinstance(row.get("conversations"), list)
+                    and len(row.get("conversations", [])) >= 1
+                    and "<image>" in str(row["conversations"][0].get("value", ""))
+                    for row in qwen_rows
+                ),
+                "all_have_short_answer_supervision": all(
+                    isinstance(row.get("conversations"), list)
+                    and len(row.get("conversations", [])) >= 2
+                    and str(row["conversations"][1].get("value", "")).strip() != ""
+                    for row in qwen_rows
+                ),
             }
 
+        qwen_ok = True
+        if qwen_summary is not None:
+            qwen_ok = all(
+                bool(qwen_summary[key])
+                for key in (
+                    "matches_subset_size",
+                    "all_have_image",
+                    "all_have_conversations",
+                    "all_have_prompt_image_token",
+                    "all_have_short_answer_supervision",
+                )
+            )
         summary = {
             "num_rows": len(rows),
             "unique_sample_ids": len(set(sample_ids)),
@@ -73,7 +98,7 @@ def main() -> int:
             "metadata_ok": metadata_ok,
             "missing_images": missing_images,
             "qwen_summary": qwen_summary,
-            "status": "passed" if len(sample_ids) == len(set(sample_ids)) and split_ok and metadata_ok and not missing_images else "failed",
+            "status": "passed" if len(sample_ids) == len(set(sample_ids)) and split_ok and metadata_ok and not missing_images and qwen_ok else "failed",
         }
         write_json(args.output, summary, overwrite=args.overwrite)
         emit(f"validated {len(rows)} subset rows: status={summary['status']}", log_file=args.log_file)
