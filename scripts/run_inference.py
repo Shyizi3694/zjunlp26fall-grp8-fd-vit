@@ -205,7 +205,7 @@ def main() -> int:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with output_path.open(append_mode, encoding="utf-8") as handle:
             for row in predictions:
-                handle.write(json.dumps(row, ensure_ascii=False) + "\\n")
+                handle.write(json.dumps(row, ensure_ascii=False) + "\n")
 
         _write_artifacts(output_path, args, cfg, model_id)
         emit(f"wrote {len(predictions)} predictions -> {output_path}", log_file=args.log_file)

@@ -70,21 +70,36 @@ def _extract_device(model: Any) -> str:
     return "cpu"
 
 
-def _build_inputs(processor: Any, prompt: str, image_path: str) -> dict[str, Any]:
+def _prompt_to_user_text(prompt: str) -> str:
+    text = (prompt or "").replace("<image>", "").strip()
+    return text or "Answer the question about the image."
+
+
+def _build_inputs(processor: Any, prompt: str, image_path: str) -> tuple[dict[str, Any], int]:
     from PIL import Image
 
     image = Image.open(image_path).convert("RGB")
-    return processor(text=prompt, images=image, return_tensors="pt")
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "image", "image": image},
+                {"type": "text", "text": _prompt_to_user_text(prompt)},
+            ],
+        }
+    ]
+    chat_text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    encoded = processor(text=[chat_text], images=[image], return_tensors="pt")
+    prompt_length = int(encoded["input_ids"].shape[1])
+    return encoded, prompt_length
 
 
-def _safe_decode(processor: Any, prompt: str, generated_ids: Any) -> str:
-    raw_output = processor.batch_decode(generated_ids, skip_special_tokens=True)
+def _safe_decode(processor: Any, generated_ids: Any, prompt_length: int) -> str:
+    new_tokens = generated_ids[:, prompt_length:] if prompt_length > 0 else generated_ids
+    raw_output = processor.batch_decode(new_tokens, skip_special_tokens=True)
     if not raw_output:
         return ""
-    raw = raw_output[0].strip()
-    if prompt and raw.startswith(prompt):
-        return raw[len(prompt) :].strip()
-    return raw
+    return raw_output[0].strip()
 
 
 def run_inference_for_one(
@@ -96,7 +111,7 @@ def run_inference_for_one(
     log_file: str | None = None,
 ) -> tuple[str, float]:
     start = time.perf_counter()
-    inputs = _build_inputs(model_bundle.processor, prompt, image_path)
+    inputs, prompt_length = _build_inputs(model_bundle.processor, prompt, image_path)
 
     if hasattr(model_bundle.model, "device"):
         for key, value in inputs.items():
@@ -126,7 +141,7 @@ def run_inference_for_one(
             raise
         raise
 
-    raw = _safe_decode(model_bundle.processor, prompt, generated)
+    raw = _safe_decode(model_bundle.processor, generated, prompt_length)
     latency = time.perf_counter() - start
     append_log(log_file, f"infer one: latency={latency:.4f}, prompt_len={len(prompt)}")
     return raw, latency

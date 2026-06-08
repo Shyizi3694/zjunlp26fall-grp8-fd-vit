@@ -46,7 +46,7 @@ def _load_model_and_processor(
     log_file: str | None,
 ) -> QwenModel:
     try:
-        from transformers import AutoProcessor, AutoModelForCausalLM
+        from transformers import AutoProcessor, AutoModelForImageTextToText, AutoModelForCausalLM
     except Exception as exc:  # pragma: no cover - environment dependent
         raise RuntimeError(f"transformers import failed: {exc}")
 
@@ -72,7 +72,10 @@ def _load_model_and_processor(
         processor_kwargs["trust_remote_code"] = trust_remote_code
 
         try:
-            model = AutoModelForCausalLM.from_pretrained(model_path, **model_kwargs)
+            try:
+                model = AutoModelForImageTextToText.from_pretrained(model_path, **model_kwargs)
+            except ValueError:
+                model = AutoModelForCausalLM.from_pretrained(model_path, **model_kwargs)
             processor = AutoProcessor.from_pretrained(model_path, **processor_kwargs)
             append_log(
                 log_file,
