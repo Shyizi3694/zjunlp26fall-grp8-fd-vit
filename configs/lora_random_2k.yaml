@@ -53,7 +53,7 @@ qlora:
 
 runtime:
   python_executable: python3
-  trainer_command: ""
+  trainer_command: "python3 scripts/train_lora.py"
   num_processes: 1
 
 logging:
