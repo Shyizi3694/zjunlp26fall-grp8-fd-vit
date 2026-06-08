@@ -1,0 +1,59 @@
+{
+  "created_at": "2026-06-08T06:05:11Z",
+  "repo_root": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit",
+  "strategy": "failure_driven",
+  "seed": 42,
+  "requested_n": 2000,
+  "actual_n": 2000,
+  "train_available": 9009,
+  "unique_sample_ids": 2000,
+  "duplicate_sample_id_count": 0,
+  "unique_question_ids": 2000,
+  "split_counts": {
+    "train": 2000
+  },
+  "image_exists_count": 2000,
+  "image_exists_ratio": 1.0,
+  "failures_seen": 2348,
+  "matched_failure_counts": {
+    "other": 650,
+    "attribute": 470,
+    "commonsense": 179,
+    "ocr_text": 85,
+    "spatial": 70,
+    "ambiguous": 807,
+    "counting": 29,
+    "answer_format": 58
+  },
+  "selected_failure_counts": {
+    "commonsense": 178,
+    "ambiguous": 522,
+    "other": 615,
+    "attribute": 453,
+    "spatial": 67,
+    "ocr_text": 84,
+    "counting": 28,
+    "answer_format": 53
+  },
+  "selected_source_error_type_counts": {
+    "commonsense": 178,
+    "ambiguous": 522,
+    "other": 615,
+    "attribute": 453,
+    "spatial": 67,
+    "ocr_text": 84,
+    "counting": 28,
+    "answer_format": 53
+  },
+  "fallback_random_count": 0,
+  "missing_failure_matches": 0,
+  "qwen_output": "data/processed/okvqa/train_failure_2k_qwen.json",
+  "qwen_template_usage": {
+    "okvqa_short_001": 334,
+    "okvqa_short_002": 334,
+    "okvqa_short_003": 333,
+    "okvqa_short_004": 333,
+    "okvqa_short_005": 333,
+    "okvqa_short_006": 333
+  }
+}
