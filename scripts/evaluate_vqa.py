@@ -85,7 +85,7 @@ def main() -> int:
         error_path.parent.mkdir(parents=True, exist_ok=True)
         with error_path.open("w", encoding="utf-8") as handle:
             for row in report["errors"]:
-                handle.write(json.dumps(row, ensure_ascii=False) + "\\n")
+                handle.write(json.dumps(row, ensure_ascii=False) + "\n")
 
         emit(
             f"evaluated {len(rows)} samples; "
