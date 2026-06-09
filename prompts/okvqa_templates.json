@@ -7,12 +7,12 @@
   {
     "template_id": "okvqa_short_002",
     "task": "vqa",
-    "text": "<image>\nLook at the image and answer this question: {question}\nGive only the answer, not a sentence."
+    "text": "<image>\nLook at the image and answer this question: {question}\nReply with only the answer phrase. Keep it compact; avoid full sentences, lists, and explanations."
   },
   {
     "template_id": "okvqa_short_003",
     "task": "vqa",
-    "text": "<image>\nWhat is the correct answer to this question?\nQuestion: {question}\nShort answer:"
+    "text": "<image>\nWhat is the correct answer to this question?\nQuestion: {question}\nUse an OK-VQA style short answer: a compact phrase, not a sentence or reasoning."
   },
   {
     "template_id": "okvqa_short_004",
@@ -22,11 +22,11 @@
   {
     "template_id": "okvqa_short_005",
     "task": "vqa",
-    "text": "<image>\nBased on the image, answer briefly: {question}\nAnswer only with the most likely short answer."
+    "text": "<image>\nBased on the image, answer this question: {question}\nName the most likely answer in a compact phrase only. Do not add alternatives, a list, or an explanation."
   },
   {
     "template_id": "okvqa_short_006",
     "task": "vqa",
-    "text": "<image>\nQuestion: {question}\nDo not output explanations.\nAnswer:"
+    "text": "<image>\nQuestion: {question}\nProvide only the answer phrase. Keep it terse, with no sentence framing, multiple items, or explanation."
   }
 ]
