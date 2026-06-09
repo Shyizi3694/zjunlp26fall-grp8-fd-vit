@@ -1,0 +1,6 @@
+{
+  "created_at": "2026-06-08T12:25:12Z",
+  "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+  "model_id": "Qwen/Qwen3-VL-4B-Instruct",
+  "config": "configs/infer_lora_random_2k.yaml"
+}

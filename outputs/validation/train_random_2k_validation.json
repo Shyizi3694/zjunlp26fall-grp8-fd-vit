@@ -1,0 +1,17 @@
+{
+  "num_rows": 2000,
+  "unique_sample_ids": 2000,
+  "duplicate_sample_ids": 0,
+  "all_train_split": true,
+  "metadata_ok": true,
+  "missing_images": [],
+  "qwen_summary": {
+    "num_rows": 2000,
+    "matches_subset_size": true,
+    "all_have_image": true,
+    "all_have_conversations": true,
+    "all_have_prompt_image_token": true,
+    "all_have_short_answer_supervision": true
+  },
+  "status": "passed"
+}
