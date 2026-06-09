@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FD-VIT Results Dashboard</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #dbe1ea;
+      --accent: #0f766e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef6ff 0%, var(--bg) 220px);
+      color: var(--text);
+    }
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #f4fbf9 100%);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+    .hero p { color: var(--muted); max-width: 860px; }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    .metrics {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 20px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+    .metric-card .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .section {
+      margin-top: 22px;
+    }
+    .charts {
+      grid-template-columns: 1fr;
+    }
+    .chart-card {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--panel);
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f9fafb;
+      position: sticky;
+      top: 0;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    code {
+      background: #eef2f7;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>FD-VIT Results Dashboard</h1>
+      <p>This dashboard aggregates experiment metrics, error breakdowns, and qualitative examples from the selected output directories. It is designed as a report companion for quickly comparing E00–E03.</p>
+      <p class="muted">Experiments: E00_zero_shot_basic, E01_prompt_strict, E02_lora_random_2k_r8, E03_lora_failure_2k_r8</p>
+    </section>
+
+    <section class="section">
+      <div class="grid metrics">
+        <div class='card metric-card'><div class='eyebrow'>E00_zero_shot_basic</div><h3>Zero-shot</h3><p>acc_soft <strong>0.4973</strong></p><p>acc_any <strong>0.5350</strong></p><p>format_error_rate <strong>0.0000</strong></p></div><div class='card metric-card'><div class='eyebrow'>E01_prompt_strict</div><h3>Prompt-only</h3><p>acc_soft <strong>0.4813</strong></p><p>acc_any <strong>0.5170</strong></p><p>format_error_rate <strong>0.0010</strong></p></div><div class='card metric-card'><div class='eyebrow'>E02_lora_random_2k_r8</div><h3>LoRA-random</h3><p>acc_soft <strong>0.6150</strong></p><p>acc_any <strong>0.6600</strong></p><p>format_error_rate <strong>0.0000</strong></p></div><div class='card metric-card'><div class='eyebrow'>E03_lora_failure_2k_r8</div><h3>LoRA-failure</h3><p>acc_soft <strong>0.6263</strong></p><p>acc_any <strong>0.6720</strong></p><p>format_error_rate <strong>0.0000</strong></p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Metric Charts</h2>
+      <div class="grid charts">
+        <div class="card chart-card"><svg viewBox="0 0 760 280" width="100%" height="auto" role="img" aria-label="Soft Accuracy"><text x="56" y="18" font-size="15" font-weight="700" fill="#111827">Soft Accuracy</text><line x1="56" y1="244" x2="740" y2="244" stroke="#9ca3af" /><rect x="98" y="83" width="85" height="161" rx="6" fill="#1f77b4" opacity="0.9"></rect><text x="140.5" y="77" text-anchor="middle" font-size="11" fill="#243447">49.73%</text><text x="140.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E00_zero_shot_basic</text><rect x="268" y="88" width="85" height="156" rx="6" fill="#ff7f0e" opacity="0.9"></rect><text x="310.5" y="82" text-anchor="middle" font-size="11" fill="#243447">48.13%</text><text x="310.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E01_prompt_strict</text><rect x="438" y="44" width="85" height="200" rx="6" fill="#2ca02c" opacity="0.9"></rect><text x="480.5" y="38" text-anchor="middle" font-size="11" fill="#243447">61.50%</text><text x="480.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E02_lora_random_2k_r8</text><rect x="608" y="40" width="85" height="204" rx="6" fill="#d62728" opacity="0.9"></rect><text x="650.5" y="34" text-anchor="middle" font-size="11" fill="#243447">62.63%</text><text x="650.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E03_lora_failure_2k_r8</text></svg></div>
+        <div class="card chart-card"><svg viewBox="0 0 760 280" width="100%" height="auto" role="img" aria-label="Any-Match Accuracy"><text x="56" y="18" font-size="15" font-weight="700" fill="#111827">Any-Match Accuracy</text><line x1="56" y1="244" x2="740" y2="244" stroke="#9ca3af" /><rect x="98" y="82" width="85" height="162" rx="6" fill="#1f77b4" opacity="0.9"></rect><text x="140.5" y="76" text-anchor="middle" font-size="11" fill="#243447">53.50%</text><text x="140.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E00_zero_shot_basic</text><rect x="268" y="88" width="85" height="156" rx="6" fill="#ff7f0e" opacity="0.9"></rect><text x="310.5" y="82" text-anchor="middle" font-size="11" fill="#243447">51.70%</text><text x="310.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E01_prompt_strict</text><rect x="438" y="44" width="85" height="200" rx="6" fill="#2ca02c" opacity="0.9"></rect><text x="480.5" y="38" text-anchor="middle" font-size="11" fill="#243447">66.00%</text><text x="480.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E02_lora_random_2k_r8</text><rect x="608" y="40" width="85" height="204" rx="6" fill="#d62728" opacity="0.9"></rect><text x="650.5" y="34" text-anchor="middle" font-size="11" fill="#243447">67.20%</text><text x="650.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E03_lora_failure_2k_r8</text></svg></div>
+        <div class="card chart-card"><svg viewBox="0 0 760 280" width="100%" height="auto" role="img" aria-label="Format Error Rate"><text x="56" y="18" font-size="15" font-weight="700" fill="#111827">Format Error Rate</text><line x1="56" y1="244" x2="740" y2="244" stroke="#9ca3af" /><rect x="98" y="244" width="85" height="0" rx="6" fill="#1f77b4" opacity="0.9"></rect><text x="140.5" y="238" text-anchor="middle" font-size="11" fill="#243447">0.00%</text><text x="140.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E00_zero_shot_basic</text><rect x="268" y="40" width="85" height="204" rx="6" fill="#ff7f0e" opacity="0.9"></rect><text x="310.5" y="34" text-anchor="middle" font-size="11" fill="#243447">0.10%</text><text x="310.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E01_prompt_strict</text><rect x="438" y="244" width="85" height="0" rx="6" fill="#2ca02c" opacity="0.9"></rect><text x="480.5" y="238" text-anchor="middle" font-size="11" fill="#243447">0.00%</text><text x="480.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E02_lora_random_2k_r8</text><rect x="608" y="244" width="85" height="0" rx="6" fill="#d62728" opacity="0.9"></rect><text x="650.5" y="238" text-anchor="middle" font-size="11" fill="#243447">0.00%</text><text x="650.5" y="266" text-anchor="middle" font-size="11" fill="#4b5563">E03_lora_failure_2k_r8</text></svg></div>
+        <div class="card chart-card"><svg viewBox="0 0 980 360" width="100%" height="auto" role="img" aria-label="Error Type Comparison"><text x="80" y="18" font-size="15" font-weight="700" fill="#111827">Error Type Comparison</text><line x1="80" y1="290" x2="960" y2="290" stroke="#9ca3af" /><rect x="88.0" y="288.9" width="17.6" height="1.1" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="107.6" y="275.1" width="17.6" height="14.9" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="127.1" y="290.0" width="17.6" height="0.0" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="146.7" y="290.0" width="17.6" height="0.0" rx="3" fill="#d62728" opacity="0.9"></rect><text x="128.9" y="342" text-anchor="middle" font-size="10" fill="#4b5563">answer_format</text><rect x="185.8" y="290.0" width="17.6" height="0.0" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="205.3" y="277.2" width="17.6" height="12.8" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="224.9" y="290.0" width="17.6" height="0.0" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="244.4" y="290.0" width="17.6" height="0.0" rx="3" fill="#d62728" opacity="0.9"></rect><text x="226.7" y="342" text-anchor="middle" font-size="10" fill="#4b5563">counting</text><rect x="283.6" y="290.0" width="17.6" height="0.0" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="303.1" y="274.0" width="17.6" height="16.0" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="322.7" y="290.0" width="17.6" height="0.0" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="342.2" y="290.0" width="17.6" height="0.0" rx="3" fill="#d62728" opacity="0.9"></rect><text x="324.4" y="342" text-anchor="middle" font-size="10" fill="#4b5563">ocr_text</text><rect x="381.3" y="290.0" width="17.6" height="0.0" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="400.9" y="276.2" width="17.6" height="13.8" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="420.4" y="290.0" width="17.6" height="0.0" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="440.0" y="290.0" width="17.6" height="0.0" rx="3" fill="#d62728" opacity="0.9"></rect><text x="422.2" y="342" text-anchor="middle" font-size="10" fill="#4b5563">spatial</text><rect x="479.1" y="290.0" width="17.6" height="0.0" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="498.7" y="200.6" width="17.6" height="89.4" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="518.2" y="290.0" width="17.6" height="0.0" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="537.8" y="290.0" width="17.6" height="0.0" rx="3" fill="#d62728" opacity="0.9"></rect><text x="520.0" y="342" text-anchor="middle" font-size="10" fill="#4b5563">attribute</text><rect x="576.9" y="290.0" width="17.6" height="0.0" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="596.4" y="235.7" width="17.6" height="54.3" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="616.0" y="290.0" width="17.6" height="0.0" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="635.6" y="290.0" width="17.6" height="0.0" rx="3" fill="#d62728" opacity="0.9"></rect><text x="617.8" y="342" text-anchor="middle" font-size="10" fill="#4b5563">commonsense</text><rect x="674.7" y="287.9" width="17.6" height="2.1" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="694.2" y="287.9" width="17.6" height="2.1" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="713.8" y="288.9" width="17.6" height="1.1" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="733.3" y="290.0" width="17.6" height="0.0" rx="3" fill="#d62728" opacity="0.9"></rect><text x="715.6" y="342" text-anchor="middle" font-size="10" fill="#4b5563">hallucination</text><rect x="772.4" y="46.3" width="17.6" height="243.7" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="792.0" y="117.6" width="17.6" height="172.4" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="811.6" y="91.0" width="17.6" height="199.0" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="831.1" y="102.7" width="17.6" height="187.3" rx="3" fill="#d62728" opacity="0.9"></rect><text x="813.3" y="342" text-anchor="middle" font-size="10" fill="#4b5563">ambiguous</text><rect x="870.2" y="42.0" width="17.6" height="248.0" rx="3" fill="#1f77b4" opacity="0.9"></rect><rect x="889.8" y="151.6" width="17.6" height="138.4" rx="3" fill="#ff7f0e" opacity="0.9"></rect><rect x="909.3" y="128.2" width="17.6" height="161.8" rx="3" fill="#2ca02c" opacity="0.9"></rect><rect x="928.9" y="128.2" width="17.6" height="161.8" rx="3" fill="#d62728" opacity="0.9"></rect><text x="911.1" y="342" text-anchor="middle" font-size="10" fill="#4b5563">other</text><rect x="80" y="312" width="12" height="12" rx="3" fill="#1f77b4"></rect><text x="98" y="322" font-size="11" fill="#374151">E00_zero_shot_basic</text><rect x="260" y="312" width="12" height="12" rx="3" fill="#ff7f0e"></rect><text x="278" y="322" font-size="11" fill="#374151">E01_prompt_strict</text><rect x="440" y="312" width="12" height="12" rx="3" fill="#2ca02c"></rect><text x="458" y="322" font-size="11" fill="#374151">E02_lora_random_2k_r8</text><rect x="620" y="312" width="12" height="12" rx="3" fill="#d62728"></rect><text x="638" y="322" font-size="11" fill="#374151">E03_lora_failure_2k_r8</text></svg></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Main Results</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Exp</th>
+              <th>Setting</th>
+              <th>Train n</th>
+              <th>Sampling</th>
+              <th>LoRA r</th>
+              <th>acc_any</th>
+              <th>acc_soft</th>
+              <th>format_error_rate</th>
+              <th>Δ vs E00</th>
+              <th>Δ vs E02</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>E00_zero_shot_basic</td><td>Zero-shot</td><td>0</td><td>-</td><td>-</td><td>0.5350</td><td>0.4973</td><td>0.0000</td><td>+0.0000</td><td>-0.1177</td></tr><tr><td>E01_prompt_strict</td><td>Prompt-only</td><td>0</td><td>-</td><td>-</td><td>0.5170</td><td>0.4813</td><td>0.0010</td><td>-0.0160</td><td>-0.1337</td></tr><tr><td>E02_lora_random_2k_r8</td><td>LoRA-random</td><td>2000</td><td>random</td><td>8</td><td>0.6600</td><td>0.6150</td><td>0.0000</td><td>+0.1177</td><td>+0.0000</td></tr><tr><td>E03_lora_failure_2k_r8</td><td>LoRA-failure</td><td>2000</td><td>failure</td><td>8</td><td>0.6720</td><td>0.6263</td><td>0.0000</td><td>+0.1290</td><td>+0.0113</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Error Breakdown</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>error_type</th><th>E00_zero_shot_basic_errors</th><th>E01_prompt_strict_errors</th><th>E02_lora_random_2k_r8_errors</th><th>E03_lora_failure_2k_r8_errors</th><th>E03_minus_E02</th><th>observation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>answer_format</td><td>1</td><td>14</td><td>0</td><td>0</td><td>0</td><td>unchanged vs random</td></tr><tr><td>counting</td><td>0</td><td>12</td><td>0</td><td>0</td><td>0</td><td>unchanged vs random</td></tr><tr><td>ocr_text</td><td>0</td><td>15</td><td>0</td><td>0</td><td>0</td><td>unchanged vs random</td></tr><tr><td>spatial</td><td>0</td><td>13</td><td>0</td><td>0</td><td>0</td><td>unchanged vs random</td></tr><tr><td>attribute</td><td>0</td><td>84</td><td>0</td><td>0</td><td>0</td><td>unchanged vs random</td></tr><tr><td>commonsense</td><td>0</td><td>51</td><td>0</td><td>0</td><td>0</td><td>unchanged vs random</td></tr><tr><td>hallucination</td><td>2</td><td>2</td><td>1</td><td>0</td><td>-1</td><td>improved vs random</td></tr><tr><td>ambiguous</td><td>229</td><td>162</td><td>187</td><td>176</td><td>-11</td><td>improved vs random</td></tr><tr><td>other</td><td>233</td><td>130</td><td>152</td><td>152</td><td>0</td><td>unchanged vs random</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Qualitative Cases</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>sample_id</th><th>question</th><th>gt_answers</th><th>E00_zero_shot_basic</th><th>E01_prompt_strict</th><th>E02_lora_random_2k_r8</th><th>E03_lora_failure_2k_r8</th><th>error_type</th><th>note</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>okvqa_val_004258</td><td>What decade could this be?</td><td>1930s; 1930s; 1930s; 1930s; 1940; 1940; 1940; 1940; 1940s; 1940s</td><td>1930s (correct)</td><td>1930s (correct)</td><td>1930</td><td>1940 (correct)</td><td>other</td><td>failure-driven fixes an error that random LoRA misses</td></tr><tr><td>okvqa_val_000816</td><td>What healthy properties do these fruit contain?</td><td>vitamin; vitamin; vitamin; vitamin; vitamin; vitamin; potassium; potassium; potassium; potassium</td><td>vitamin c</td><td>Vitamin C, potassium, fiber, antioxidants</td><td>vitamin c</td><td>vitamin (correct)</td><td>other</td><td>failure-driven fixes an error that random LoRA misses</td></tr><tr><td>okvqa_val_004692</td><td>What style of train is in the station?</td><td>commuter; commuter; commuter; commuter; high speed train; high speed train; transportation; transportation; passenger; passenger</td><td>subway</td><td>commuter (correct)</td><td>subway</td><td>commuter (correct)</td><td>ambiguous</td><td>failure-driven fixes an error that random LoRA misses</td></tr><tr><td>okvqa_val_004885</td><td>When did people start wearing those types of hat like the man in the plaid shirt?</td><td>early 19th century; early 19th century; early 19th century; early 19th century; early 19th century; early 19th century; mid 20th century; mid 20th century; 1900; 1900</td><td>medieval times</td><td>medieval times</td><td>medieval</td><td>1900 (correct)</td><td>attribute</td><td>failure-driven fixes an error that random LoRA misses</td></tr><tr><td>okvqa_val_003441</td><td>Who were the first people to successfully do this?</td><td>wright brother; wright brother; wright brother; wright brother; wright brother; wright brother; wright brother; wright brother; wright brother; wright brother</td><td>aviators</td><td>the Wright brothers</td><td>lee a. de forest</td><td>wright brother (correct)</td><td>other</td><td>failure-driven fixes an error that random LoRA misses</td></tr><tr><td>okvqa_val_003201</td><td>What is the meter for?</td><td>park; park; park; park; park; park; park; park; park; park</td><td>parking</td><td>parking</td><td>parking</td><td>park (correct)</td><td>other</td><td>failure-driven fixes an error that random LoRA misses</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "exp_dirs": [
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E00_zero_shot_basic",
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E01_prompt_strict",
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E02_lora_random_2k_r8",
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E03_lora_failure_2k_r8"
+  ],
+  "summary_csv": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/dashboard_main/summary_metrics.csv",
+  "error_csv": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/dashboard_main/error_breakdown.csv",
+  "case_csv": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/dashboard_main/case_studies.csv",
+  "dashboard_html": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/dashboard_main/dashboard.html"
+}
