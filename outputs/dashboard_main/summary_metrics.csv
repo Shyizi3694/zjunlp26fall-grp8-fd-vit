@@ -1,0 +1,5 @@
+exp_id,setting,train_n,sampling,lora_r,acc_any,acc_soft,format_error_rate,num_samples,delta_acc_soft_vs_E00,delta_acc_soft_vs_E02,metrics_path
+E00_zero_shot_basic,Zero-shot,0,-,-,0.535,0.4973333333333343,0.0,1000,0.0,-0.11766666666666548,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E00_zero_shot_basic/metrics.json
+E01_prompt_strict,Prompt-only,0,-,-,0.517,0.48133333333333417,0.001,1000,-0.016000000000000125,-0.1336666666666656,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E01_prompt_strict/metrics.json
+E02_lora_random_2k_r8,LoRA-random,2000,random,8,0.66,0.6149999999999998,0.0,1000,0.11766666666666548,0.0,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E02_lora_random_2k_r8/metrics.json
+E03_lora_failure_2k_r8,LoRA-failure,2000,failure,8,0.672,0.626333333333333,0.0,1000,0.12899999999999867,0.011333333333333195,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/E03_lora_failure_2k_r8/metrics.json

@@ -15,12 +15,25 @@ from fdvit_prep_common import append_log, emit, repo_path
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--outputs", required=True, help="Outputs root directory")
+    parser.add_argument(
+        "--exp_dirs",
+        nargs="+",
+        default=None,
+        help="One or more experiment output directories, e.g. outputs/E00_zero_shot_basic",
+    )
+    parser.add_argument(
+        "--outputs",
+        default=None,
+        help="Outputs root directory (backward-compatible fallback; scans **/metrics.json under this root)",
+    )
     parser.add_argument("--output_csv", required=True, help="CSV output path")
     parser.add_argument("--output_md", required=True, help="Markdown output path")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
     parser.add_argument("--log_file", default=None, help="Optional text log file")
-    return parser.parse_args()
+    args = parser.parse_args()
+    if not args.exp_dirs and not args.outputs:
+        parser.error("one of --exp_dirs or --outputs is required")
+    return args
 
 
 def exp_sort_key(exp_id: str) -> tuple[int, str]:
@@ -50,9 +63,35 @@ def infer_train_n(exp_id: str, metrics: dict[str, Any]) -> str:
     return "0"
 
 
-def load_metrics(outputs_root: Path) -> list[dict[str, Any]]:
+def _iter_metrics_paths(*, exp_dirs: list[str] | None, outputs_root: str | None) -> list[Path]:
+    metrics_paths: list[Path] = []
+    seen: set[Path] = set()
+
+    if exp_dirs:
+        for raw_dir in exp_dirs:
+            exp_dir = repo_path(raw_dir)
+            metrics_path = exp_dir / "metrics.json"
+            if not metrics_path.exists():
+                raise FileNotFoundError(f"metrics not found for exp dir: {exp_dir}")
+            resolved = metrics_path.resolve()
+            if resolved not in seen:
+                seen.add(resolved)
+                metrics_paths.append(metrics_path)
+        return metrics_paths
+
+    if outputs_root:
+        root = repo_path(outputs_root)
+        for metrics_path in sorted(root.glob("**/metrics.json")):
+            resolved = metrics_path.resolve()
+            if resolved not in seen:
+                seen.add(resolved)
+                metrics_paths.append(metrics_path)
+    return metrics_paths
+
+
+def load_metrics(*, exp_dirs: list[str] | None, outputs_root: str | None) -> list[dict[str, Any]]:
     rows = []
-    for metrics_path in sorted(outputs_root.glob("**/metrics.json")):
+    for metrics_path in _iter_metrics_paths(exp_dirs=exp_dirs, outputs_root=outputs_root):
         payload = json.loads(metrics_path.read_text(encoding="utf-8"))
         if not isinstance(payload, dict):
             continue
@@ -122,7 +161,7 @@ def write_md(path: Path, rows: list[dict[str, Any]], *, overwrite: bool) -> None
 def main() -> int:
     args = parse_args()
     try:
-        rows = load_metrics(repo_path(args.outputs))
+        rows = load_metrics(exp_dirs=args.exp_dirs, outputs_root=args.outputs)
         zero_soft = next((row["acc_soft"] for row in rows if row["exp_id"].startswith("E00")), 0.0)
         random_soft = next((row["acc_soft"] for row in rows if row["exp_id"].startswith("E02")), 0.0)
         for row in rows:
@@ -132,7 +171,18 @@ def main() -> int:
         write_csv(repo_path(args.output_csv), rows, overwrite=args.overwrite)
         write_md(repo_path(args.output_md), rows, overwrite=args.overwrite)
         emit(f"wrote {len(rows)} summarized rows", log_file=args.log_file)
-        append_log(args.log_file, json.dumps({"rows": len(rows), "output_csv": args.output_csv, "output_md": args.output_md}))
+        append_log(
+            args.log_file,
+            json.dumps(
+                {
+                    "rows": len(rows),
+                    "exp_dirs": args.exp_dirs,
+                    "outputs": args.outputs,
+                    "output_csv": args.output_csv,
+                    "output_md": args.output_md,
+                }
+            ),
+        )
         return 0
     except Exception as exc:  # noqa: BLE001
         emit(f"ERROR: {exc}")
