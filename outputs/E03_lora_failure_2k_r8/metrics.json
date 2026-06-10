@@ -2,10 +2,10 @@
   "num_samples": 1000,
   "num_valid_predictions": 1000,
   "acc_any": 0.672,
-  "acc_soft": 0.626333333333333,
+  "acc_soft": 0.6233333333333331,
   "format_error_rate": 0.0,
   "empty_prediction_rate": 0.0,
-  "avg_prediction_length_tokens": 1.153,
+  "avg_prediction_length_tokens": 1.145,
   "error_count": 328,
   "seed": 42,
   "experiment_id": "E03_lora_failure_2k_r8",
@@ -20,5 +20,5 @@
     "batch_size": 1,
     "do_sample": false
   },
-  "created_at": "2026-06-08T12:47:13Z"
+  "created_at": "2026-06-10T15:30:52Z"
 }

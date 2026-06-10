@@ -1,12 +1,12 @@
 {
   "num_samples": 1000,
   "num_valid_predictions": 1000,
-  "acc_any": 0.517,
-  "acc_soft": 0.48133333333333417,
-  "format_error_rate": 0.001,
+  "acc_any": 0.498,
+  "acc_soft": 0.46200000000000085,
+  "format_error_rate": 0.0,
   "empty_prediction_rate": 0.0,
-  "avg_prediction_length_tokens": 1.526,
-  "error_count": 483,
+  "avg_prediction_length_tokens": 1.484,
+  "error_count": 502,
   "seed": 42,
   "experiment_id": "E01_prompt_strict",
   "model_id": "Qwen/Qwen3-VL-4B-Instruct",
@@ -20,5 +20,5 @@
     "batch_size": 1,
     "do_sample": false
   },
-  "created_at": "2026-06-08T10:22:57Z"
+  "created_at": "2026-06-10T12:19:47Z"
 }

@@ -1,0 +1,1 @@
+python run_inference.py --config configs/infer_prompt_only.yaml --input data/processed/okvqa/train_probe_3000.jsonl --output outputs/train_probe_3000/predictions.jsonl --seed 42 --overwrite

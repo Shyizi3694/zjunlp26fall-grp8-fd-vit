@@ -1,10 +1,10 @@
 error_type,E00_zero_shot_basic_errors,E01_prompt_strict_errors,E02_lora_random_2k_r8_errors,E03_lora_failure_2k_r8_errors,E03_minus_E02,observation
-answer_format,1,14,0,0,0,unchanged vs random
-counting,0,12,0,0,0,unchanged vs random
-ocr_text,0,15,0,0,0,unchanged vs random
-spatial,0,13,0,0,0,unchanged vs random
-attribute,0,84,0,0,0,unchanged vs random
-commonsense,0,51,0,0,0,unchanged vs random
-hallucination,2,2,1,0,-1,improved vs random
-ambiguous,229,162,187,176,-11,improved vs random
-other,233,130,152,152,0,unchanged vs random
+answer_format,1,6,0,0,0,unchanged vs random
+counting,0,13,0,0,0,unchanged vs random
+ocr_text,0,16,0,0,0,unchanged vs random
+spatial,0,14,0,0,0,unchanged vs random
+attribute,0,93,0,0,0,unchanged vs random
+commonsense,0,56,0,0,0,unchanged vs random
+hallucination,2,2,1,1,0,unchanged vs random
+ambiguous,229,167,187,179,-8,improved vs random
+other,233,135,152,148,-4,improved vs random

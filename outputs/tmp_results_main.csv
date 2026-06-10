@@ -1,0 +1,4 @@
+exp_id,setting,train_n,sampling,lora_r,acc_any,acc_soft,format_error_rate,delta_acc_soft_vs_E00,delta_acc_soft_vs_E02,num_samples,metrics_path
+E01_prompt_strict,Prompt-only,0,-,-,0.45,0.4333333333333334,0.0,0.4333333333333334,0.4333333333333334,20,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/train_probe_20_fixed/metrics.json
+E01_prompt_strict,Prompt-only,0,-,-,0.5253333333333333,0.4925555555555567,0.0006666666666666666,0.4925555555555567,0.4925555555555567,3000,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/train_probe_3000/metrics.json
+E01_prompt_strict,Prompt-only,0,-,-,0.5304,0.49739999999999934,0.0006,0.49739999999999934,0.49739999999999934,5000,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/train_probe_5000/metrics.json

@@ -1,0 +1,24 @@
+{
+  "num_samples": 20,
+  "num_valid_predictions": 0,
+  "acc_any": 0.0,
+  "acc_soft": 0.0,
+  "format_error_rate": 1.0,
+  "empty_prediction_rate": 1.0,
+  "avg_prediction_length_tokens": 0.0,
+  "error_count": 20,
+  "seed": 42,
+  "experiment_id": "E01_prompt_strict",
+  "model_id": "Qwen/Qwen3-VL-4B-Instruct",
+  "checkpoint": null,
+  "dataset": "okvqa",
+  "split": "train",
+  "generation_config": {
+    "max_new_tokens": 16,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "batch_size": 1,
+    "do_sample": false
+  },
+  "created_at": "2026-06-08T05:26:51Z"
+}

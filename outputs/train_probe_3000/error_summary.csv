@@ -1,0 +1,10 @@
+experiment_id,error_type,num_errors,error_rate,num_samples,notes
+E01_prompt_strict,answer_format,37,0.025983,3000,
+E01_prompt_strict,counting,15,0.010534,3000,
+E01_prompt_strict,ocr_text,49,0.03441,3000,
+E01_prompt_strict,spatial,39,0.027388,3000,
+E01_prompt_strict,attribute,287,0.201545,3000,
+E01_prompt_strict,commonsense,121,0.084972,3000,
+E01_prompt_strict,hallucination,0,0.0,3000,
+E01_prompt_strict,ambiguous,498,0.349719,3000,
+E01_prompt_strict,other,378,0.265449,3000,
