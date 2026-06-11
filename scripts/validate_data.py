@@ -23,6 +23,17 @@ REQUIRED_FIELDS = [
     "answers",
     "answer",
 ]
+GUI_REQUIRED_FIELDS = [
+    "sample_id",
+    "dataset",
+    "split",
+    "image_path",
+    "instruction",
+    "bbox",
+    "point",
+    "image_size",
+    "control_type",
+]
 VALID_SPLITS = {"train", "val", "test", "dev"}
 OVERLAP_KEYS = {"question_id", "image_id"}
 
@@ -102,13 +113,138 @@ def check_records(records: list[dict[str, Any]], check_images: bool, expect_spli
         "num_records": len(records),
         "qwen_records": 0,
         "legacy_records": 0,
+        "gui_records": 0,
+        "non_empty_instruction": 0,
     }
 
     sample_id_counter = Counter()
     image_missing = 0
 
     for idx, record in enumerate(records):
-        if "sample_id" in record:
+        if {"sample_id", "instruction", "bbox", "image_size"} <= record.keys():
+            schema = "gui"
+            missing = [field for field in GUI_REQUIRED_FIELDS if record.get(field) in (None, "", [])]
+            sid = record.get("sample_id")
+            if missing:
+                errors.append(
+                    {
+                        "index": idx,
+                        "sample_id": sid,
+                        "type": "missing_required_field",
+                        "field": missing[0],
+                        "message": f"missing or empty GUI field: {missing[0]}",
+                    }
+                )
+            if sid is not None:
+                sample_id_counter[sid] += 1
+            else:
+                errors.append({"index": idx, "type": "missing_sample_id", "message": "sample_id missing"})
+            if record.get("split") not in VALID_SPLITS:
+                errors.append(
+                    {
+                        "index": idx,
+                        "sample_id": sid,
+                        "type": "invalid_split",
+                        "message": f"invalid split: {record.get('split')}",
+                    }
+                )
+            if expect_split and record.get("split") != expect_split:
+                errors.append(
+                    {
+                        "index": idx,
+                        "sample_id": sid,
+                        "type": "wrong_split",
+                        "message": f"split expected {expect_split}, got {record.get('split')}",
+                    }
+                )
+            if isinstance(record.get("instruction"), str) and record["instruction"].strip():
+                stats["non_empty_instruction"] += 1
+            else:
+                errors.append(
+                    {
+                        "index": idx,
+                        "sample_id": sid,
+                        "type": "empty_instruction",
+                        "message": "instruction is empty",
+                    }
+                )
+            for field, expected_len in (("bbox", 4), ("point", 2), ("image_size", 2)):
+                value = record.get(field)
+                if not isinstance(value, list) or len(value) != expected_len:
+                    errors.append(
+                        {
+                            "index": idx,
+                            "sample_id": sid,
+                            "type": "invalid_gui_geometry",
+                            "field": field,
+                            "message": f"{field} must be a list of length {expected_len}",
+                        }
+                    )
+                    continue
+                try:
+                    numbers = [float(item) for item in value]
+                except (TypeError, ValueError):
+                    errors.append(
+                        {
+                            "index": idx,
+                            "sample_id": sid,
+                            "type": "invalid_gui_geometry",
+                            "field": field,
+                            "message": f"{field} must contain numeric values",
+                        }
+                    )
+                    continue
+                if field == "bbox" and (numbers[2] < numbers[0] or numbers[3] < numbers[1]):
+                    errors.append(
+                        {
+                            "index": idx,
+                            "sample_id": sid,
+                            "type": "invalid_gui_geometry",
+                            "field": field,
+                            "message": "bbox must satisfy x2 >= x1 and y2 >= y1",
+                        }
+                    )
+                if field == "image_size" and (numbers[0] <= 0 or numbers[1] <= 0):
+                    errors.append(
+                        {
+                            "index": idx,
+                            "sample_id": sid,
+                            "type": "invalid_gui_geometry",
+                            "field": field,
+                            "message": "image_size values must be positive",
+                        }
+                    )
+            if check_images:
+                image_path = record.get("image_path")
+                if not isinstance(image_path, str):
+                    errors.append(
+                        {
+                            "index": idx,
+                            "sample_id": sid,
+                            "type": "invalid_image_path",
+                            "message": "image_path missing or not a string",
+                        }
+                    )
+                else:
+                    path = Path(image_path)
+                    if not path.is_absolute():
+                        path = repo_path(path)
+                    if not path.exists():
+                        image_missing += 1
+                        errors.append(
+                            {
+                                "index": idx,
+                                "sample_id": sid,
+                                "type": "image_not_found",
+                                "message": f"missing image: {image_path}",
+                            }
+                        )
+            for field in GUI_REQUIRED_FIELDS:
+                if record.get(field):
+                    stats["field_coverage"][field] += 1
+            stats["gui_records"] += 1
+
+        elif "sample_id" in record:
             schema = "legacy"
             missing = [field for field in REQUIRED_FIELDS if not record.get(field)]
             if missing:
@@ -386,7 +522,15 @@ def main() -> int:
         "checks": {
             "parseable": len(parse_errors) == 0,
             "required_fields": not any(
-                e["type"] in {"missing_required_field", "empty_question", "empty_answers", "invalid_split"}
+                e["type"]
+                in {
+                    "missing_required_field",
+                    "empty_question",
+                    "empty_answers",
+                    "empty_instruction",
+                    "invalid_split",
+                    "invalid_gui_geometry",
+                }
                 for e in all_errors
             ),
             "sample_id_unique": extra_stats["duplicate_sample_ids"] == 0,
@@ -395,10 +539,12 @@ def main() -> int:
             "schema_stats": {
                 "qwen_records": extra_stats["sample_stats"]["qwen_records"],
                 "legacy_records": extra_stats["sample_stats"]["legacy_records"],
+                "gui_records": extra_stats["sample_stats"]["gui_records"],
             },
             "legacy_field_coverage": dict(extra_stats["sample_stats"]["field_coverage"]),
             "question_non_empty": extra_stats["sample_stats"]["non_empty_question"],
             "answers_non_empty": extra_stats["sample_stats"]["non_empty_answers"],
+            "instruction_non_empty": extra_stats["sample_stats"]["non_empty_instruction"],
         },
         "stats": extra_stats,
     }

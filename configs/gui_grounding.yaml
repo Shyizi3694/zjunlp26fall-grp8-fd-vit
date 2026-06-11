@@ -1,0 +1,28 @@
+experiment_id: B01_gui_grounding_demo
+seed: 42
+
+model:
+  model_id: Qwen/Qwen3-VL-4B-Instruct
+  local_dir: models/Qwen3-VL-4B-Instruct
+  revision: main
+  device: auto
+  trust_remote_code: true
+  torch_dtype: auto
+  generation:
+    max_new_tokens: 32
+    temperature: 0.0
+    top_p: 1.0
+
+inference:
+  template_file: prompts/gui_grounding_templates.json
+  template_id: gui_point_001
+  checkpoint: null
+  device_map: auto
+  coordinate_mode: auto
+
+data:
+  input: data/processed/gui/val_small.jsonl
+  output_dir: outputs/B01_gui_grounding_demo
+
+logging:
+  write_environment_metadata: true

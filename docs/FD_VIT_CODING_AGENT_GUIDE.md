@@ -1186,15 +1186,88 @@ Answer with the target coordinate as (x, y).
 - `scripts/prepare_gui_grounding.py`
 - `scripts/run_gui_grounding.py`
 - `scripts/evaluate_gui_grounding.py`
+- `configs/gui_grounding.yaml`
+- `prompts/gui_grounding_templates.json`
+
+## 12.3.1 从 0 运行流程
+
+GUI grounding 默认使用 ScreenSpot-Pro 小样本，不下载全量数据。推荐从 `vscode_macos` 取 20 条作为 demo：
+
+```bash
+python scripts/prepare_gui_grounding.py \
+  --download \
+  --download_images \
+  --tasks vscode_macos \
+  --limit 20 \
+  --seed 42 \
+  --output data/processed/gui/val_small.jsonl \
+  --sample_output data/samples/gui_grounding_5.jsonl \
+  --check_images \
+  --overwrite
+```
+
+然后校验数据：
+
+```bash
+python scripts/validate_data.py \
+  --input data/processed/gui/val_small.jsonl \
+  --check_images \
+  --expect_split val \
+  --output logs/validate_gui_val_small.json \
+  --overwrite
+```
+
+推理前先做 dry run，确认输入、配置和模板可解析：
+
+```bash
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --limit 2 \
+  --dry_run
+```
+
+在 CUDA/Linux 环境中运行真实推理：
+
+```bash
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --overwrite
+```
+
+最后评测：
+
+```bash
+python scripts/evaluate_gui_grounding.py \
+  --predictions outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --output outputs/B01_gui_grounding_demo/metrics.json \
+  --error_output outputs/B01_gui_grounding_demo/errors.jsonl \
+  --overwrite
+```
+
+推荐输出目录：
+
+```text
+outputs/B01_gui_grounding_demo/
+├── predictions.jsonl
+├── metrics.json
+├── errors.jsonl
+├── run_config.yaml
+├── command.txt
+└── environment.txt
+```
 
 ## 12.4 指标
 
 | 指标 | 含义 |
 |---|---|
 | point_in_bbox_acc | 预测点是否落在 GT bbox 内 |
-| center_distance | 预测点到目标中心点的归一化距离 |
+| center_distance_norm | 预测点到目标中心点的归一化距离 |
 | parse_success_rate | 模型输出是否能解析出坐标 |
-| control_type_acc | 按按钮、菜单、输入框等类型统计准确率 |
+| control_type_metrics | 按按钮、菜单、输入框等类型统计准确率和距离 |
 
 ## 12.5 验收标准
 
@@ -1202,6 +1275,8 @@ Answer with the target coordinate as (x, y).
 - 不训练完整 agent；
 - 不引入复杂交互环境；
 - 坐标归一化规则写清楚；
+- 逐样本保存 `predictions.jsonl`；
+- `metrics.json` 至少包含 `point_in_bbox_acc`、`parse_success_rate`、`center_distance_norm`；
 - 作为附录展示，不放在主结果表核心位置。
 
 ---

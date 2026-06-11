@@ -125,6 +125,62 @@
 | `parse_success_rate` | 输出可解析成坐标的比例 |
 | `center_distance_norm` | 归一化中心点距离 |
 
+### 6.4 B01 GUI Grounding 协议
+
+`B01_gui_grounding_demo` 只作为 bonus/appendix，不能替代 E00-E03，也不进入主结果表。
+
+默认数据和规模：
+
+| 项目 | 默认值 |
+|---|---|
+| dataset | ScreenSpot-Pro (`likaixin/ScreenSpot-Pro`) |
+| task subset | `vscode_macos` |
+| sample size | 20 |
+| processed input | `data/processed/gui/val_small.jsonl` |
+| prompt config | `configs/gui_grounding.yaml` |
+| output dir | `outputs/B01_gui_grounding_demo/` |
+
+推荐命令：
+
+```bash
+python scripts/prepare_gui_grounding.py \
+  --download \
+  --download_images \
+  --tasks vscode_macos \
+  --limit 20 \
+  --seed 42 \
+  --output data/processed/gui/val_small.jsonl \
+  --sample_output data/samples/gui_grounding_5.jsonl \
+  --check_images \
+  --overwrite
+
+python scripts/validate_data.py \
+  --input data/processed/gui/val_small.jsonl \
+  --check_images \
+  --expect_split val \
+  --output logs/validate_gui_val_small.json \
+  --overwrite
+
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --overwrite
+
+python scripts/evaluate_gui_grounding.py \
+  --predictions outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --output outputs/B01_gui_grounding_demo/metrics.json \
+  --error_output outputs/B01_gui_grounding_demo/errors.jsonl \
+  --overwrite
+```
+
+报告时必须说明：
+
+- 这是静态截图的目标点定位，不是完整 GUI Agent；
+- 没有环境交互、规划或执行闭环；
+- 样本量小，只能作为 qualitative/bonus 证据；
+- 坐标为原图像素坐标，bbox 为 `[x1, y1, x2, y2]`。
+
 ---
 
 ## 7. 结果表格式

@@ -1,0 +1,12 @@
+[
+  {
+    "template_id": "gui_point_001",
+    "task": "gui_grounding",
+    "text": "<image>\nInstruction: {instruction}\nThe screenshot size is {image_width}x{image_height} pixels. Answer with only the target point as (x, y) in pixel coordinates. Do not explain."
+  },
+  {
+    "template_id": "gui_point_002",
+    "task": "gui_grounding",
+    "text": "<image>\nFind the UI element for this instruction: {instruction}\nReturn only one click coordinate in the original image pixel space, formatted as (x, y)."
+  }
+]

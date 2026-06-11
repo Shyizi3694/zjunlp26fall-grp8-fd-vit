@@ -795,34 +795,118 @@ python scripts/make_case_study_table.py \
 ## 输入
 
 ```text
+data/raw/gui/screenspot_pro/
 data/processed/gui/val_small.jsonl
 ```
 
 ## 输出
 
 ```text
+data/raw/gui/screenspot_pro/annotations/*.json
+data/raw/gui/screenspot_pro/images/
+data/processed/gui/val_small.jsonl
+data/processed/gui/val_small.summary.json
+data/samples/gui_grounding_5.jsonl
 outputs/B01_gui_grounding_demo/predictions.jsonl
 outputs/B01_gui_grounding_demo/metrics.json
+outputs/B01_gui_grounding_demo/errors.jsonl
 ```
 
 ## 实现要求
 
+- 数据源默认使用 Hugging Face dataset `likaixin/ScreenSpot-Pro`；
+- 默认只做小样本，如 `vscode_macos` + `--limit 20`；
+- 脚本 `scripts/prepare_gui_grounding.py` 支持下载 annotation、下载选中图片、转换为统一 GUI JSONL；
+- 脚本 `scripts/run_gui_grounding.py` 使用 Qwen3-VL 对 GUI 截图预测目标坐标；
+- 脚本 `scripts/evaluate_gui_grounding.py` 读取 predictions 并输出 metrics；
 - 预测坐标点；
 - 解析 `(x, y)`；
 - 计算 point-in-bbox；
 - 计算 center distance；
+- 记录 `parse_success_rate`、`control_type_metrics`；
 - 只做 demo，不加入主结果表。
 
-## 自测命令
+## 从 0 运行命令
+
+### 1. 下载并转换小样本
+
+```bash
+python scripts/prepare_gui_grounding.py \
+  --download \
+  --download_images \
+  --tasks vscode_macos \
+  --limit 20 \
+  --seed 42 \
+  --output data/processed/gui/val_small.jsonl \
+  --sample_output data/samples/gui_grounding_5.jsonl \
+  --check_images \
+  --overwrite
+```
+
+### 2. 校验数据
+
+```bash
+python scripts/validate_data.py \
+  --input data/processed/gui/val_small.jsonl \
+  --check_images \
+  --expect_split val \
+  --output logs/validate_gui_val_small.json \
+  --overwrite
+```
+
+### 3. 推理前 dry run
+
+```bash
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --limit 2 \
+  --dry_run
+```
+
+### 4. CUDA 环境真实推理
+
+```bash
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --overwrite
+```
+
+### 5. 评测
 
 ```bash
 python scripts/evaluate_gui_grounding.py \
   --predictions outputs/B01_gui_grounding_demo/predictions.jsonl \
-  --output outputs/B01_gui_grounding_demo/metrics.json
+  --output outputs/B01_gui_grounding_demo/metrics.json \
+  --error_output outputs/B01_gui_grounding_demo/errors.jsonl \
+  --overwrite
+```
+
+## 自测命令
+
+```bash
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --limit 2 \
+  --dry_run
+
+python scripts/evaluate_gui_grounding.py \
+  --predictions outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --output outputs/B01_gui_grounding_demo/metrics.json \
+  --error_output outputs/B01_gui_grounding_demo/errors.jsonl \
+  --overwrite
 ```
 
 ## 完成标准
 
 - 小样本可运行；
+- `data/processed/gui/val_small.jsonl` 通过 `validate_data.py --check_images`；
+- `outputs/B01_gui_grounding_demo/predictions.jsonl` 为逐样本 JSONL；
+- `metrics.json` 包含 `point_in_bbox_acc`、`parse_success_rate`、`center_distance_norm`；
 - 坐标解析成功率有记录；
 - 结果作为附录，不干扰主线。

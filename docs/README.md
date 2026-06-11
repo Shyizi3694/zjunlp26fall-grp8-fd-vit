@@ -151,3 +151,121 @@ FD-VIT/
 - 修改 coding agent 工作流：更新 `FD_VIT_CODING_AGENT_GUIDE.md` 和 `CODING_AGENT_TASK_CARDS.md`。
 - 修改报告结构：更新 `REPORT_CHECKLIST.md`。
 - 修改任何独立文档后，如需要一次性给 agent 阅读，再重新生成 `FD_VIT_DOCS_ALL_IN_ONE.md`。
+
+## 8. GUI Grounding Bonus 从 0 流程
+
+GUI grounding 只作为 `B01_gui_grounding_demo` bonus，不进入 E00-E03 主结果表，也不能替代 OK-VQA/VQA 主线。
+
+### 8.1 前置条件
+
+先完成基础环境和模型准备：
+
+```bash
+python scripts/check_env.py --output logs/env_check.json --overwrite
+
+python scripts/prepare_model.py \
+  --download \
+  --output logs/model_prepare.json \
+  --overwrite
+```
+
+CUDA/Linux 环境中应确认：
+
+- `logs/env_check.json` 中 CUDA 可用；
+- `transformers >= 4.57.0`；
+- `qwen-vl-utils`、`peft`、`Pillow` 可用；
+- `logs/model_prepare.json` 中 `ready_for_baseline: true`。
+
+### 8.2 下载和转换 ScreenSpot-Pro 小样本
+
+默认数据源为 Hugging Face dataset `likaixin/ScreenSpot-Pro`。为控制 bonus 规模，默认只取 `vscode_macos` 的小样本：
+
+```bash
+python scripts/prepare_gui_grounding.py \
+  --download \
+  --download_images \
+  --tasks vscode_macos \
+  --limit 20 \
+  --seed 42 \
+  --output data/processed/gui/val_small.jsonl \
+  --sample_output data/samples/gui_grounding_5.jsonl \
+  --check_images \
+  --overwrite
+```
+
+生成文件：
+
+- `data/raw/gui/screenspot_pro/annotations/vscode_macos.json`
+- `data/raw/gui/screenspot_pro/images/...`
+- `data/processed/gui/val_small.jsonl`
+- `data/processed/gui/val_small.summary.json`
+- `data/samples/gui_grounding_5.jsonl`
+
+如果服务器已经缓存数据，可加 `--local_files_only`，但必须保证 annotation 和图片已在 `data/raw/gui/screenspot_pro/` 下。
+
+### 8.3 校验 GUI 数据
+
+```bash
+python scripts/validate_data.py \
+  --input data/processed/gui/val_small.jsonl \
+  --check_images \
+  --expect_split val \
+  --output logs/validate_gui_val_small.json \
+  --overwrite
+```
+
+通过条件：
+
+- JSONL 可解析；
+- 每条样本有 `sample_id`、`instruction`、`bbox`、`point`、`image_size`、`control_type`；
+- `bbox`、`point`、`image_size` 数值合法；
+- 图片路径存在。
+
+### 8.4 运行 GUI Grounding 推理
+
+```bash
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --overwrite
+```
+
+可先做 2 条 dry run，不加载模型：
+
+```bash
+python scripts/run_gui_grounding.py \
+  --config configs/gui_grounding.yaml \
+  --input data/processed/gui/val_small.jsonl \
+  --output outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --limit 2 \
+  --dry_run
+```
+
+推理输出必须保留逐样本 `predictions.jsonl`。即使某条推理失败，也应写入该样本并记录 `error`。
+
+### 8.5 评测 B01
+
+```bash
+python scripts/evaluate_gui_grounding.py \
+  --predictions outputs/B01_gui_grounding_demo/predictions.jsonl \
+  --output outputs/B01_gui_grounding_demo/metrics.json \
+  --error_output outputs/B01_gui_grounding_demo/errors.jsonl \
+  --overwrite
+```
+
+主要指标：
+
+- `point_in_bbox_acc`：预测点是否落入 GT bbox；
+- `parse_success_rate`：模型输出是否能解析为坐标；
+- `center_distance_norm`：预测点到 bbox 中心的归一化距离；
+- `control_type_metrics`：按控件类型分组的附加分析。
+
+### 8.6 报告使用方式
+
+报告中只把 B01 放在 bonus/appendix：
+
+- 不放入 E00-E03 主结果表；
+- 不声称模型具备完整 GUI Agent 能力；
+- 不做多步环境交互结论；
+- 只说明这是静态截图上的 click-point grounding 小样本评测。
