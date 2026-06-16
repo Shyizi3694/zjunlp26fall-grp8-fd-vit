@@ -1,0 +1,12 @@
+{
+  "exp_dirs": [
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/E00_zero_shot_basic_val5k",
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/E01_prompt_strict_val5k",
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/E02_lora_random_2k_r8_val5k",
+    "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/E03_lora_failure_2k_r8_val5k"
+  ],
+  "summary_csv": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/dashboard_val5k/summary_metrics.csv",
+  "error_csv": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/dashboard_val5k/error_breakdown.csv",
+  "case_csv": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/dashboard_val5k/case_studies.csv",
+  "dashboard_html": "/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/val5k_main/dashboard_val5k/dashboard.html"
+}

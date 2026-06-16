@@ -1,0 +1,1 @@
+python run_inference.py --config configs/infer_lora_failure_5k_r8.yaml --input data/processed/okvqa/val_1k.jsonl --output outputs/lora_5k_ablation_val1k/E05_lora_failure_5k_r8_val1k/predictions.jsonl --seed 42 --overwrite --log_file logs/lora_5k_ablation_val1k/E05_inference.log

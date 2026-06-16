@@ -1,0 +1,7 @@
+exp_id,template_id,num_samples,acc_any,acc_soft,format_error_rate,delta_acc_soft_vs_template_001,delta_acc_soft_vs_best,metrics_path
+E06_prompt_template_001_val1k,okvqa_short_001,1000,0.535,0.4973333333333343,0.0,0.0,0.0,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/prompt_ablation_val1k/E06_prompt_template_001_val1k/metrics.json
+E06_prompt_template_002_val1k,okvqa_short_002,1000,0.498,0.46200000000000085,0.0,-0.03533333333333344,-0.03533333333333344,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/prompt_ablation_val1k/E06_prompt_template_002_val1k/metrics.json
+E06_prompt_template_003_val1k,okvqa_short_003,1000,0.474,0.44200000000000056,0.0,-0.055333333333333734,-0.055333333333333734,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/prompt_ablation_val1k/E06_prompt_template_003_val1k/metrics.json
+E06_prompt_template_004_val1k,okvqa_short_004,1000,0.521,0.48400000000000093,0.0,-0.013333333333333364,-0.013333333333333364,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/prompt_ablation_val1k/E06_prompt_template_004_val1k/metrics.json
+E06_prompt_template_005_val1k,okvqa_short_005,1000,0.414,0.38566666666666716,0.0,-0.11166666666666714,-0.11166666666666714,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/prompt_ablation_val1k/E06_prompt_template_005_val1k/metrics.json
+E06_prompt_template_006_val1k,okvqa_short_006,1000,0.498,0.4650000000000007,0.0,-0.0323333333333336,-0.0323333333333336,/pool/hdd/home/hhhjyz/zjunlp26fall-grp8-fd-vit/outputs/prompt_ablation_val1k/E06_prompt_template_006_val1k/metrics.json

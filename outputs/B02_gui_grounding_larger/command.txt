@@ -1,0 +1,1 @@
+python run_gui_grounding.py --config configs/gui_grounding_larger.yaml --input data/processed/gui/val_100.jsonl --output outputs/B02_gui_grounding_larger/predictions.jsonl --seed 42 --overwrite --log_file logs/gui_grounding_larger_inference.log

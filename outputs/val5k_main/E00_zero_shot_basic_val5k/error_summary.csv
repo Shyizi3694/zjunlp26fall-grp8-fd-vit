@@ -1,0 +1,10 @@
+experiment_id,error_type,num_errors,error_rate,num_samples,notes
+E00_zero_shot_basic_val5k,answer_format,8,0.003575,5000,
+E00_zero_shot_basic_val5k,counting,35,0.015639,5000,
+E00_zero_shot_basic_val5k,ocr_text,72,0.032172,5000,
+E00_zero_shot_basic_val5k,spatial,48,0.021448,5000,
+E00_zero_shot_basic_val5k,attribute,473,0.211349,5000,
+E00_zero_shot_basic_val5k,commonsense,200,0.089366,5000,
+E00_zero_shot_basic_val5k,hallucination,5,0.002234,5000,
+E00_zero_shot_basic_val5k,ambiguous,739,0.330206,5000,
+E00_zero_shot_basic_val5k,other,658,0.294013,5000,

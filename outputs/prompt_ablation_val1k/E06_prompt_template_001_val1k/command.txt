@@ -1,0 +1,1 @@
+python run_inference.py --config configs/prompt_ablation_t001_val1k.yaml --input data/processed/okvqa/val_1k.jsonl --output outputs/prompt_ablation_val1k/E06_prompt_template_001_val1k/predictions.jsonl --seed 42 --overwrite --log_file logs/prompt_ablation_val1k/E06_prompt_template_001_val1k_inference.log

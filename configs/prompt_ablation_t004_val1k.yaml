@@ -1,0 +1,24 @@
+experiment_id: E06_prompt_template_004_val1k
+seed: 42
+
+model:
+  model_id: Qwen/Qwen3-VL-4B-Instruct
+  local_dir: models/Qwen3-VL-4B-Instruct
+  revision: main
+  device: auto
+  generation:
+    max_new_tokens: 16
+    temperature: 0.0
+    top_p: 1.0
+
+inference:
+  template_file: prompts/okvqa_templates.json
+  template_id: okvqa_short_004
+  batch_size: 1
+  resume: false
+  output_format: vqa
+  checkpoint: null
+  device_map: auto
+
+logging:
+  write_environment_metadata: true

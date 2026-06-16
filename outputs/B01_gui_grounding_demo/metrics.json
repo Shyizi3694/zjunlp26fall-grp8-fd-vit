@@ -1,0 +1,38 @@
+{
+  "experiment_id": "B01_gui_grounding_demo",
+  "dataset": "screenspot_pro",
+  "split": "val",
+  "num_samples": 20,
+  "num_valid_predictions": 20,
+  "parse_success_count": 20,
+  "parse_success_rate": 1.0,
+  "point_in_bbox_count": 9,
+  "point_in_bbox_acc": 0.45,
+  "point_in_bbox_acc_parsed": 0.45,
+  "center_distance_norm": 0.09909700585173517,
+  "center_distance_norm_median": 0.043889792218793834,
+  "inference_error_rate": 0.0,
+  "control_type_metrics": {
+    "icon": {
+      "num_samples": 5,
+      "parse_success_rate": 1.0,
+      "point_in_bbox_acc": 0.0,
+      "center_distance_norm": 0.09202648666054133
+    },
+    "text": {
+      "num_samples": 15,
+      "parse_success_rate": 1.0,
+      "point_in_bbox_acc": 0.6,
+      "center_distance_norm": 0.10145384558213309
+    }
+  },
+  "parse_sources": {
+    "text_numbers": 20
+  },
+  "parse_modes": {
+    "qwen_1000": 20
+  },
+  "coordinate_mode": "qwen_1000",
+  "seed": 42,
+  "created_at": "2026-06-16T11:29:20Z"
+}

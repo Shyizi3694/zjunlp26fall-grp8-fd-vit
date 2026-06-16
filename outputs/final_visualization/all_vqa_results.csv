@@ -1,0 +1,19 @@
+group,exp_id,setting,sampling,train_n,num_samples,acc_any,acc_soft,format_error_rate,metrics_path
+main_val1k,E00_zero_shot_basic,Zero-shot,none,0,1000,0.535,0.4973333333333343,0.0,outputs/E00_zero_shot_basic/metrics.json
+main_val1k,E01_prompt_strict,Prompt-only,none,0,1000,0.498,0.46200000000000085,0.0,outputs/E01_prompt_strict/metrics.json
+main_val1k,E02_lora_random_2k_r8,LoRA random,random,2000,1000,0.662,0.6166666666666664,0.0,outputs/E02_lora_random_2k_r8/metrics.json
+main_val1k,E03_lora_failure_2k_r8,LoRA failure,failure,2000,1000,0.662,0.6176666666666665,0.0,outputs/E03_lora_failure_2k_r8/metrics.json
+main_val1k,E04_lora_random_5k_r8_val1k,LoRA random,random,5000,1000,0.669,0.6266666666666663,0.0,outputs/lora_5k_ablation_val1k/E04_lora_random_5k_r8_val1k/metrics.json
+main_val1k,E05_lora_failure_5k_r8_val1k,LoRA failure,failure,5000,1000,0.679,0.6313333333333329,0.0,outputs/lora_5k_ablation_val1k/E05_lora_failure_5k_r8_val1k/metrics.json
+prompt_ablation,E06_prompt_template_001_val1k,Prompt template 001,none,0,1000,0.529,0.49200000000000094,0.0,outputs/prompt_ablation_val1k/E06_prompt_template_001_val1k/metrics.json
+prompt_ablation,E06_prompt_template_002_val1k,Prompt template 002,none,0,1000,0.491,0.4570000000000008,0.0,outputs/prompt_ablation_val1k/E06_prompt_template_002_val1k/metrics.json
+prompt_ablation,E06_prompt_template_003_val1k,Prompt template 003,none,0,1000,0.474,0.44200000000000056,0.0,outputs/prompt_ablation_val1k/E06_prompt_template_003_val1k/metrics.json
+prompt_ablation,E06_prompt_template_004_val1k,Prompt template 004,none,0,1000,0.521,0.48400000000000093,0.0,outputs/prompt_ablation_val1k/E06_prompt_template_004_val1k/metrics.json
+prompt_ablation,E06_prompt_template_005_val1k,Prompt template 005,none,0,1000,0.414,0.38566666666666716,0.0,outputs/prompt_ablation_val1k/E06_prompt_template_005_val1k/metrics.json
+prompt_ablation,E06_prompt_template_006_val1k,Prompt template 006,none,0,1000,0.498,0.4650000000000007,0.0,outputs/prompt_ablation_val1k/E06_prompt_template_006_val1k/metrics.json
+val5k,E00_zero_shot_basic_val5k,Zero-shot,none,0,5000,0.5524,0.5126666666666656,0.0,outputs/val5k_main/E00_zero_shot_basic_val5k/metrics.json
+val5k,E01_prompt_strict_val5k,Prompt-only,none,0,5000,0.5004,0.46473333333333405,0.0002,outputs/val5k_main/E01_prompt_strict_val5k/metrics.json
+val5k,E02_lora_random_2k_r8_val5k,LoRA random,random,2000,5000,0.667,0.6204666666666624,0.0002,outputs/val5k_main/E02_lora_random_2k_r8_val5k/metrics.json
+val5k,E03_lora_failure_2k_r8_val5k,LoRA failure,failure,2000,5000,0.6696,0.6201333333333284,0.0002,outputs/val5k_main/E03_lora_failure_2k_r8_val5k/metrics.json
+val5k,E04_lora_random_5k_r8_val5k,LoRA random,random,5000,5000,0.6818,0.6358666666666619,0.0002,outputs/lora_5k_ablation_val5k/E04_lora_random_5k_r8_val5k/metrics.json
+val5k,E05_lora_failure_5k_r8_val5k,LoRA failure,failure,5000,5000,0.6818,0.6341333333333284,0.0002,outputs/lora_5k_ablation_val5k/E05_lora_failure_5k_r8_val5k/metrics.json

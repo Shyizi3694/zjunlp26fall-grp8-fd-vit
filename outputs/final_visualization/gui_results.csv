@@ -1,0 +1,3 @@
+exp_id,num_samples,parse_success_rate,point_in_bbox_acc,center_distance_norm,metrics_path
+B01 small GUI demo,20,1.0,0.45,0.09909700585173517,outputs/B01_gui_grounding_demo/metrics.json
+B02 larger GUI demo,55,1.0,0.43636363636363634,0.12393454738365901,outputs/B02_gui_grounding_larger/metrics.json

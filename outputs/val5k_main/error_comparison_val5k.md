@@ -1,0 +1,11 @@
+| error_type | E00_errors | E01_errors | E02_errors | E03_errors | E03_minus_E02 | observation |
+|---|---|---|---|---|---|---|
+| answer_format | 8 | 34 | 1 | 1 | 0 | unchanged vs random |
+| counting | 35 | 42 | 42 | 44 | 2 | worse vs random |
+| ocr_text | 72 | 83 | 53 | 54 | 1 | worse vs random |
+| spatial | 48 | 52 | 37 | 35 | -2 | improved vs random |
+| attribute | 473 | 517 | 333 | 321 | -12 | improved vs random |
+| commonsense | 200 | 218 | 138 | 123 | -15 | improved vs random |
+| hallucination | 5 | 5 | 4 | 5 | 1 | worse vs random |
+| ambiguous | 739 | 831 | 631 | 632 | 1 | worse vs random |
+| other | 658 | 716 | 426 | 437 | 11 | worse vs random |

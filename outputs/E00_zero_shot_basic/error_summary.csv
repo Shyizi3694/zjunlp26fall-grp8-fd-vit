@@ -1,0 +1,10 @@
+experiment_id,error_type,num_errors,error_rate,num_samples,notes
+E00_zero_shot_basic,answer_format,1,0.002151,1000,
+E00_zero_shot_basic,counting,13,0.027957,1000,
+E00_zero_shot_basic,ocr_text,11,0.023656,1000,
+E00_zero_shot_basic,spatial,13,0.027957,1000,
+E00_zero_shot_basic,attribute,86,0.184946,1000,
+E00_zero_shot_basic,commonsense,49,0.105376,1000,
+E00_zero_shot_basic,hallucination,2,0.004301,1000,
+E00_zero_shot_basic,ambiguous,159,0.341935,1000,
+E00_zero_shot_basic,other,131,0.28172,1000,

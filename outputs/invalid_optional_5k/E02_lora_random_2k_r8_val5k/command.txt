@@ -1,0 +1,1 @@
+python run_inference.py --config configs/infer_lora_random_2k.yaml --input data/processed/okvqa/val_5k.jsonl --output outputs/E02_lora_random_2k_r8_val5k/predictions.jsonl --seed 42 --overwrite

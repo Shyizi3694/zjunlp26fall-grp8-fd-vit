@@ -18,7 +18,7 @@ inference:
   template_id: gui_point_001
   checkpoint: null
   device_map: auto
-  coordinate_mode: auto
+  coordinate_mode: qwen_1000
 
 data:
   input: data/processed/gui/val_small.jsonl

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>FD-VIT Final Experiment Dashboard</title>
+  <style>
+    :root { color-scheme: light; --ink: #1f2933; --muted: #64707d; --line: #d9dee5; --panel: #f7f8fa; }
+    body { margin: 0; font-family: Inter, Arial, sans-serif; color: var(--ink); background: #ffffff; }
+    header { padding: 28px 34px 18px; border-bottom: 1px solid var(--line); }
+    h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
+    h2 { margin: 28px 0 12px; font-size: 20px; }
+    p { color: var(--muted); line-height: 1.5; }
+    main { max-width: 1180px; margin: 0 auto; padding: 18px 28px 42px; }
+    section { padding: 8px 0 16px; border-bottom: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 8px 9px; text-align: left; }
+    th { background: var(--panel); font-weight: 650; }
+    svg { width: 100%; height: auto; margin: 4px 0 10px; }
+    .chart-title { font-size: 18px; font-weight: 700; fill: var(--ink); }
+    .bar-label { font-size: 12px; fill: var(--ink); }
+    .bar-value { font-size: 12px; fill: var(--muted); }
+    .bar-bg { fill: #e8ecf1; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>FD-VIT Final Experiment Dashboard</h1>
+  <p>Unified view of OK-VQA mainline, val_5k extension, LoRA 5k ablation, paired significance, and GUI grounding bonus.</p>
+</header>
+<main>
+  <section>
+    <h2>OK-VQA val_1k Accuracy</h2>
+    <svg viewBox="0 0 920 220" role="img" aria-label="Soft accuracy on val_1k">
+<text x="0" y="22" class="chart-title">Soft accuracy on val_1k</text>
+<text x="0" y="62" class="bar-label">E00_zero_shot_basic</text>
+<rect x="260" y="46" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="46" width="278.5" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="60" class="bar-value">0.4973</text>
+<text x="0" y="90" class="bar-label">E01_prompt_strict</text>
+<rect x="260" y="74" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="74" width="258.7" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="88" class="bar-value">0.4620</text>
+<text x="0" y="118" class="bar-label">E02_lora_random_2k_r8</text>
+<rect x="260" y="102" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="102" width="345.3" height="18" rx="3" fill="#a05a2c" />
+<text x="832" y="116" class="bar-value">0.6167</text>
+<text x="0" y="146" class="bar-label">E03_lora_failure_2k_r8</text>
+<rect x="260" y="130" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="130" width="345.9" height="18" rx="3" fill="#2f6f73" />
+<text x="832" y="144" class="bar-value">0.6177</text>
+<text x="0" y="174" class="bar-label">E04_lora_random_5k_r8_val1k</text>
+<rect x="260" y="158" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="158" width="350.9" height="18" rx="3" fill="#a05a2c" />
+<text x="832" y="172" class="bar-value">0.6267</text>
+<text x="0" y="202" class="bar-label">E05_lora_failure_5k_r8_val1k</text>
+<rect x="260" y="186" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="186" width="353.5" height="18" rx="3" fill="#2f6f73" />
+<text x="832" y="200" class="bar-value">0.6313</text>
+</svg>
+    <table><thead><tr><th>exp_id</th><th>setting</th><th>sampling</th><th>train_n</th><th>num_samples</th><th>acc_any</th><th>acc_soft</th><th>format_error_rate</th></tr></thead><tbody><tr><td>E00_zero_shot_basic</td><td>Zero-shot</td><td>none</td><td>0</td><td>1000</td><td>0.5350</td><td>0.4973</td><td>0.0000</td></tr><tr><td>E01_prompt_strict</td><td>Prompt-only</td><td>none</td><td>0</td><td>1000</td><td>0.4980</td><td>0.4620</td><td>0.0000</td></tr><tr><td>E02_lora_random_2k_r8</td><td>LoRA random</td><td>random</td><td>2000</td><td>1000</td><td>0.6620</td><td>0.6167</td><td>0.0000</td></tr><tr><td>E03_lora_failure_2k_r8</td><td>LoRA failure</td><td>failure</td><td>2000</td><td>1000</td><td>0.6620</td><td>0.6177</td><td>0.0000</td></tr><tr><td>E04_lora_random_5k_r8_val1k</td><td>LoRA random</td><td>random</td><td>5000</td><td>1000</td><td>0.6690</td><td>0.6267</td><td>0.0000</td></tr><tr><td>E05_lora_failure_5k_r8_val1k</td><td>LoRA failure</td><td>failure</td><td>5000</td><td>1000</td><td>0.6790</td><td>0.6313</td><td>0.0000</td></tr></tbody></table>
+  </section>
+  <section>
+    <h2>Prompt Template Ablation</h2>
+    <svg viewBox="0 0 920 220" role="img" aria-label="Soft accuracy by prompt template on val_1k">
+<text x="0" y="22" class="chart-title">Soft accuracy by prompt template on val_1k</text>
+<text x="0" y="62" class="bar-label">E06_prompt_template_001_val1k</text>
+<rect x="260" y="46" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="46" width="275.5" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="60" class="bar-value">0.4920</text>
+<text x="0" y="90" class="bar-label">E06_prompt_template_002_val1k</text>
+<rect x="260" y="74" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="74" width="255.9" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="88" class="bar-value">0.4570</text>
+<text x="0" y="118" class="bar-label">E06_prompt_template_003_val1k</text>
+<rect x="260" y="102" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="102" width="247.5" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="116" class="bar-value">0.4420</text>
+<text x="0" y="146" class="bar-label">E06_prompt_template_004_val1k</text>
+<rect x="260" y="130" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="130" width="271.0" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="144" class="bar-value">0.4840</text>
+<text x="0" y="174" class="bar-label">E06_prompt_template_005_val1k</text>
+<rect x="260" y="158" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="158" width="216.0" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="172" class="bar-value">0.3857</text>
+<text x="0" y="202" class="bar-label">E06_prompt_template_006_val1k</text>
+<rect x="260" y="186" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="186" width="260.4" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="200" class="bar-value">0.4650</text>
+</svg>
+    <table><thead><tr><th>exp_id</th><th>setting</th><th>num_samples</th><th>acc_any</th><th>acc_soft</th><th>format_error_rate</th></tr></thead><tbody><tr><td>E06_prompt_template_001_val1k</td><td>Prompt template 001</td><td>1000</td><td>0.5290</td><td>0.4920</td><td>0.0000</td></tr><tr><td>E06_prompt_template_002_val1k</td><td>Prompt template 002</td><td>1000</td><td>0.4910</td><td>0.4570</td><td>0.0000</td></tr><tr><td>E06_prompt_template_003_val1k</td><td>Prompt template 003</td><td>1000</td><td>0.4740</td><td>0.4420</td><td>0.0000</td></tr><tr><td>E06_prompt_template_004_val1k</td><td>Prompt template 004</td><td>1000</td><td>0.5210</td><td>0.4840</td><td>0.0000</td></tr><tr><td>E06_prompt_template_005_val1k</td><td>Prompt template 005</td><td>1000</td><td>0.4140</td><td>0.3857</td><td>0.0000</td></tr><tr><td>E06_prompt_template_006_val1k</td><td>Prompt template 006</td><td>1000</td><td>0.4980</td><td>0.4650</td><td>0.0000</td></tr></tbody></table>
+  </section>
+  <section>
+    <h2>OK-VQA val_5k Accuracy</h2>
+    <svg viewBox="0 0 920 220" role="img" aria-label="Soft accuracy on val_5k">
+<text x="0" y="22" class="chart-title">Soft accuracy on val_5k</text>
+<text x="0" y="62" class="bar-label">E00_zero_shot_basic_val5k</text>
+<rect x="260" y="46" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="46" width="287.1" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="60" class="bar-value">0.5127</text>
+<text x="0" y="90" class="bar-label">E01_prompt_strict_val5k</text>
+<rect x="260" y="74" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="74" width="260.3" height="18" rx="3" fill="#586f9f" />
+<text x="832" y="88" class="bar-value">0.4647</text>
+<text x="0" y="118" class="bar-label">E02_lora_random_2k_r8_val5k</text>
+<rect x="260" y="102" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="102" width="347.5" height="18" rx="3" fill="#a05a2c" />
+<text x="832" y="116" class="bar-value">0.6205</text>
+<text x="0" y="146" class="bar-label">E03_lora_failure_2k_r8_val5k</text>
+<rect x="260" y="130" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="130" width="347.3" height="18" rx="3" fill="#2f6f73" />
+<text x="832" y="144" class="bar-value">0.6201</text>
+<text x="0" y="174" class="bar-label">E04_lora_random_5k_r8_val5k</text>
+<rect x="260" y="158" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="158" width="356.1" height="18" rx="3" fill="#a05a2c" />
+<text x="832" y="172" class="bar-value">0.6359</text>
+<text x="0" y="202" class="bar-label">E05_lora_failure_5k_r8_val5k</text>
+<rect x="260" y="186" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="186" width="355.1" height="18" rx="3" fill="#2f6f73" />
+<text x="832" y="200" class="bar-value">0.6341</text>
+</svg>
+    <table><thead><tr><th>exp_id</th><th>setting</th><th>sampling</th><th>train_n</th><th>num_samples</th><th>acc_any</th><th>acc_soft</th><th>format_error_rate</th></tr></thead><tbody><tr><td>E00_zero_shot_basic_val5k</td><td>Zero-shot</td><td>none</td><td>0</td><td>5000</td><td>0.5524</td><td>0.5127</td><td>0.0000</td></tr><tr><td>E01_prompt_strict_val5k</td><td>Prompt-only</td><td>none</td><td>0</td><td>5000</td><td>0.5004</td><td>0.4647</td><td>0.0002</td></tr><tr><td>E02_lora_random_2k_r8_val5k</td><td>LoRA random</td><td>random</td><td>2000</td><td>5000</td><td>0.6670</td><td>0.6205</td><td>0.0002</td></tr><tr><td>E03_lora_failure_2k_r8_val5k</td><td>LoRA failure</td><td>failure</td><td>2000</td><td>5000</td><td>0.6696</td><td>0.6201</td><td>0.0002</td></tr><tr><td>E04_lora_random_5k_r8_val5k</td><td>LoRA random</td><td>random</td><td>5000</td><td>5000</td><td>0.6818</td><td>0.6359</td><td>0.0002</td></tr><tr><td>E05_lora_failure_5k_r8_val5k</td><td>LoRA failure</td><td>failure</td><td>5000</td><td>5000</td><td>0.6818</td><td>0.6341</td><td>0.0002</td></tr></tbody></table>
+  </section>
+  <section>
+    <h2>Paired Significance</h2>
+    <table><thead><tr><th>comparison</th><th>metric</th><th>n</th><th>baseline_mean</th><th>treatment_mean</th><th>diff_treatment_minus_baseline</th><th>bootstrap_ci_low</th><th>bootstrap_ci_high</th><th>paired_randomization_p</th><th>wins</th><th>losses</th><th>ties</th></tr></thead><tbody><tr><td>E02_vs_E03_val1k</td><td>acc_any</td><td>1000</td><td>0.662</td><td>0.662</td><td>0.0</td><td>-0.018</td><td>0.018</td><td>1.0</td><td>40</td><td>40</td><td>920</td></tr><tr><td>E02_vs_E03_val1k</td><td>acc_soft</td><td>1000</td><td>0.6166666666666666</td><td>0.6176666666666666</td><td>0.001</td><td>-0.015666666666666666</td><td>0.017333333333333333</td><td>0.9050189962007599</td><td>53</td><td>48</td><td>899</td></tr><tr><td>E04_vs_E05_val1k</td><td>acc_any</td><td>1000</td><td>0.669</td><td>0.679</td><td>0.01</td><td>-0.007</td><td>0.027</td><td>0.30293941211757647</td><td>44</td><td>34</td><td>922</td></tr><tr><td>E04_vs_E05_val1k</td><td>acc_soft</td><td>1000</td><td>0.6266666666666666</td><td>0.6313333333333334</td><td>0.004666666666666666</td><td>-0.011666666666666667</td><td>0.020666666666666667</td><td>0.5954809038192361</td><td>50</td><td>47</td><td>903</td></tr><tr><td>E02_vs_E03_val5k</td><td>acc_any</td><td>5000</td><td>0.667</td><td>0.6696</td><td>0.0026</td><td>-0.0056</td><td>0.0108</td><td>0.5722855428914218</td><td>226</td><td>213</td><td>4561</td></tr><tr><td>E02_vs_E03_val5k</td><td>acc_soft</td><td>5000</td><td>0.6204666666666667</td><td>0.6201333333333333</td><td>-0.00033333333333333365</td><td>-0.007801666666666666</td><td>0.007201666666666642</td><td>0.9142171565686863</td><td>279</td><td>282</td><td>4439</td></tr><tr><td>E04_vs_E05_val5k</td><td>acc_any</td><td>5000</td><td>0.6818</td><td>0.6818</td><td>0.0</td><td>-0.0072</td><td>0.0072</td><td>1.0</td><td>178</td><td>178</td><td>4644</td></tr><tr><td>E04_vs_E05_val5k</td><td>acc_soft</td><td>5000</td><td>0.6358666666666667</td><td>0.6341333333333333</td><td>-0.0017333333333333335</td><td>-0.008666666666666668</td><td>0.0051333333333333335</td><td>0.6080783843231353</td><td>221</td><td>231</td><td>4548</td></tr></tbody></table>
+  </section>
+  <section>
+    <h2>GUI Grounding Bonus</h2>
+    <svg viewBox="0 0 920 108" role="img" aria-label="Point-in-bbox accuracy">
+<text x="0" y="22" class="chart-title">Point-in-bbox accuracy</text>
+<text x="0" y="62" class="bar-label">B01 small GUI demo</text>
+<rect x="260" y="46" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="46" width="252.0" height="18" rx="3" fill="#6b5ca5" />
+<text x="832" y="60" class="bar-value">0.4500</text>
+<text x="0" y="90" class="bar-label">B02 larger GUI demo</text>
+<rect x="260" y="74" width="560" height="18" rx="3" class="bar-bg" />
+<rect x="260" y="74" width="244.4" height="18" rx="3" fill="#6b5ca5" />
+<text x="832" y="88" class="bar-value">0.4364</text>
+</svg>
+    <table><thead><tr><th>exp_id</th><th>num_samples</th><th>parse_success_rate</th><th>point_in_bbox_acc</th><th>center_distance_norm</th></tr></thead><tbody><tr><td>B01 small GUI demo</td><td>20</td><td>1.0000</td><td>0.4500</td><td>0.0991</td></tr><tr><td>B02 larger GUI demo</td><td>55</td><td>1.0000</td><td>0.4364</td><td>0.1239</td></tr></tbody></table>
+  </section>
+</main>
+</body>
+</html>

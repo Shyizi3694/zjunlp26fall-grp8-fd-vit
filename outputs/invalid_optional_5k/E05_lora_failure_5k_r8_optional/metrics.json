@@ -1,0 +1,24 @@
+{
+  "num_samples": 1000,
+  "num_valid_predictions": 1000,
+  "acc_any": 0.662,
+  "acc_soft": 0.6176666666666665,
+  "format_error_rate": 0.0,
+  "empty_prediction_rate": 0.0,
+  "avg_prediction_length_tokens": 1.147,
+  "error_count": 338,
+  "seed": 42,
+  "experiment_id": "E03_lora_failure_2k_r8",
+  "model_id": "Qwen/Qwen3-VL-4B-Instruct",
+  "checkpoint": "checkpoints/lora_failure_2k",
+  "dataset": "okvqa",
+  "split": "val",
+  "generation_config": {
+    "max_new_tokens": 16,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "batch_size": 1,
+    "do_sample": false
+  },
+  "created_at": "2026-06-11T15:58:42Z"
+}
